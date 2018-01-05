@@ -1,0 +1,865 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<doc>
+  <assembly>
+    <name>CyrusBuilt.CyNetTools.Plugins</name>
+  </assembly>
+  <members>
+    <member name="T:CyrusBuilt.CyNetTools.Plugins.AvailablePlugin">
+      <summary>
+            Data class for an available plugin. Holds an instance of the loaded
+            plugin, as well as the plugin's assembly path.
+            </summary>
+    </member>
+    <member name="M:CyrusBuilt.CyNetTools.Plugins.AvailablePlugin.#ctor(CyrusBuilt.CyNetTools.Plugins.IPlugin,System.String)">
+      <summary>
+            Initializes a new instance of the <b>CyrusBuilt.CyNetTools.Plugins.AvailablePlugin</b>
+            class with the plugin instance and path to the plugin assembly.
+            </summary>
+      <param name="instance">
+        <markup>
+          <include item="SMCMissingParamTag">
+            <parameter>param</parameter>
+            <parameter>instance</parameter>
+            <parameter>M:CyrusBuilt.CyNetTools.Plugins.AvailablePlugin.#ctor(CyrusBuilt.CyNetTools.Plugins.IPlugin,System.String)</parameter>
+          </include>
+        </markup>
+      </param>
+      <param name="path">
+        <markup>
+          <include item="SMCMissingParamTag">
+            <parameter>param</parameter>
+            <parameter>path</parameter>
+            <parameter>M:CyrusBuilt.CyNetTools.Plugins.AvailablePlugin.#ctor(CyrusBuilt.CyNetTools.Plugins.IPlugin,System.String)</parameter>
+          </include>
+        </markup>
+      </param>
+    </member>
+    <member name="P:CyrusBuilt.CyNetTools.Plugins.AvailablePlugin.AssemblyPath">
+      <summary>
+            Gets the full path to the plugin assembly.
+            </summary>
+    </member>
+    <member name="M:CyrusBuilt.CyNetTools.Plugins.AvailablePlugin.Equals(CyrusBuilt.CyNetTools.Plugins.AvailablePlugin)">
+      <summary>
+            Compares this instance to the specified plugin to see if they are
+            equal.
+            </summary>
+      <param name="plugin">
+            The plugin to compare to.
+            </param>
+      <returns>
+            true if the two are equal; Otherwise, false.
+            </returns>
+    </member>
+    <member name="M:CyrusBuilt.CyNetTools.Plugins.AvailablePlugin.Equals(System.Object)">
+      <summary>
+            Compares this instance to the specified object to see if they are
+            equal.
+            </summary>
+      <param name="obj">
+            The object to compare to.
+            </param>
+      <returns>
+            true if the two are equal; Otherwise, false.
+            </returns>
+    </member>
+    <member name="M:CyrusBuilt.CyNetTools.Plugins.AvailablePlugin.GetHashCode">
+      <summary>
+            Provides a hashcode identifier of this instance.
+            </summary>
+      <returns>
+            The hashcode identifier for this instance.
+            </returns>
+    </member>
+    <member name="P:CyrusBuilt.CyNetTools.Plugins.AvailablePlugin.Instance">
+      <summary>
+            Gets or the plugin instance.
+            </summary>
+    </member>
+    <member name="M:CyrusBuilt.CyNetTools.Plugins.AvailablePlugin.ToString">
+      <summary>
+            Gets a string that represents the current instance.
+            </summary>
+      <returns>
+            A string representing the plugin instance name.
+            </returns>
+    </member>
+    <member name="T:CyrusBuilt.CyNetTools.Plugins.AvailablePluginCollection">
+      <summary>
+            Represents a collection of <see cref="T:CyrusBuilt.CyNetTools.Plugins.AvailablePlugin" /> objects. This
+            collection class will not allow duplicates of any one instance.
+            </summary>
+    </member>
+    <member name="M:CyrusBuilt.CyNetTools.Plugins.AvailablePluginCollection.#ctor">
+      <summary>
+            Initializes a new instance of the <b>CyrusBuilt.CyNetTools.Plugins.AvailablePlugins</b>
+            class. This is the default constructor.
+            </summary>
+    </member>
+    <member name="M:CyrusBuilt.CyNetTools.Plugins.AvailablePluginCollection.Add(CyrusBuilt.CyNetTools.Plugins.AvailablePlugin)">
+      <summary>
+            Adds the specified <see cref="T:CyrusBuilt.CyNetTools.Plugins.AvailablePlugin" /> to the collection
+            if it is not already in the collection.
+            </summary>
+      <param name="plugin">
+            The plugin to add to the collection.
+            </param>
+      <returns>
+            If successful, the zero-based index position into which the plugin
+            was added; Otherwise, -1.
+            </returns>
+    </member>
+    <member name="M:CyrusBuilt.CyNetTools.Plugins.AvailablePluginCollection.Contains(CyrusBuilt.CyNetTools.Plugins.AvailablePlugin)">
+      <summary>
+            Determines whether or not the collection contains a specific
+            <see cref="T:CyrusBuilt.CyNetTools.Plugins.AvailablePlugin" />.
+            </summary>
+      <param name="plugin">
+            The <see cref="T:CyrusBuilt.CyNetTools.Plugins.AvailablePlugin" /> to locate in the collection.
+            </param>
+      <returns>
+            true if the <see cref="T:CyrusBuilt.CyNetTools.Plugins.AvailablePlugin" /> is found in the collection;
+            Otherwise, false.
+            </returns>
+    </member>
+    <member name="M:CyrusBuilt.CyNetTools.Plugins.AvailablePluginCollection.CopyTo(CyrusBuilt.CyNetTools.Plugins.AvailablePlugin[],System.Int32)">
+      <summary>
+            Copies the elements of the collection to a <see cref="T:CyrusBuilt.CyNetTools.Plugins.AvailablePlugin" />
+            array, starting at a particular array index.
+            </summary>
+      <param name="array">
+            The one-dimensional log entry array that is the destination of the
+            elements copied from the collection.  The location array must have
+            zero-based indexing.
+            </param>
+      <param name="index">
+            The zero-based index in the array at which copying begins.
+            </param>
+    </member>
+    <member name="M:CyrusBuilt.CyNetTools.Plugins.AvailablePluginCollection.Find(System.String)">
+      <summary>
+            Finds a plugin in the available Plugins.
+            </summary>
+      <param name="nameOrPath">
+            The name or File path of the plugin to find.
+            </param>
+      <returns>
+            Available Plugin, or null if the plugin is not found.
+            </returns>
+    </member>
+    <member name="M:CyrusBuilt.CyNetTools.Plugins.AvailablePluginCollection.IndexOf(CyrusBuilt.CyNetTools.Plugins.AvailablePlugin)">
+      <summary>
+            Determines the index of a specific <see cref="T:CyrusBuilt.CyNetTools.Plugins.AvailablePlugin" /> in
+            the collection.
+            </summary>
+      <param name="plugin">
+            The <see cref="T:CyrusBuilt.CyNetTools.Plugins.AvailablePlugin" /> to locate in the collection.
+            </param>
+      <returns>
+            The index of the <see cref="T:CyrusBuilt.CyNetTools.Plugins.AvailablePlugin" /> if found in the
+            collection; Otherwise, -1.
+            </returns>
+    </member>
+    <member name="M:CyrusBuilt.CyNetTools.Plugins.AvailablePluginCollection.Insert(System.Int32,CyrusBuilt.CyNetTools.Plugins.AvailablePlugin)">
+      <summary>
+            Inserts a <see cref="T:CyrusBuilt.CyNetTools.Plugins.AvailablePlugin" /> into the collection at the
+            specified index.
+            </summary>
+      <param name="index">
+            The zero-based index at which the <see cref="T:CyrusBuilt.CyNetTools.Plugins.AvailablePlugin" />
+            should be inserted.
+            </param>
+      <param name="plugin">
+            The <see cref="T:CyrusBuilt.CyNetTools.Plugins.AvailablePlugin" /> to insert into the collection.
+            </param>
+      <exception cref="T:CyrusBuilt.CyNetTools.Plugins.DuplicatePluginInstanceException">
+            An instance of the specified plugin already exists in the collection.
+            </exception>
+    </member>
+    <member name="M:CyrusBuilt.CyNetTools.Plugins.AvailablePluginCollection.IsNullOrEmpty(CyrusBuilt.CyNetTools.Plugins.AvailablePluginCollection)">
+      <summary>
+            Determines if the specified <b>AvailablePlugins</b> collection is
+            null or empty.
+            </summary>
+      <param name="collection">
+            The <b>AvailablePlugins</b> collection to check.
+            </param>
+      <returns>
+            true if the specified collection is null or empty; Otherwise, false.
+            </returns>
+    </member>
+    <member name="P:CyrusBuilt.CyNetTools.Plugins.AvailablePluginCollection.Item(System.Int32)">
+      <summary>
+            Gets or sets the specified <see cref="T:CyrusBuilt.CyNetTools.Plugins.AvailablePlugin" /> at the
+            specified index.
+            </summary>
+      <param name="index">
+            The zero-based index of the <see cref="T:CyrusBuilt.CyNetTools.Plugins.AvailablePlugin" /> to get or
+            set.
+            </param>
+      <returns>
+            The <see cref="T:CyrusBuilt.CyNetTools.Plugins.AvailablePlugin" /> at the specified index.
+            </returns>
+    </member>
+    <member name="M:CyrusBuilt.CyNetTools.Plugins.AvailablePluginCollection.Remove(CyrusBuilt.CyNetTools.Plugins.AvailablePlugin)">
+      <summary>
+            Removes the first occurrence of a specified <see cref="T:CyrusBuilt.CyNetTools.Plugins.AvailablePlugin" />
+            from the collection.
+            </summary>
+      <param name="plugin">
+            The <see cref="T:CyrusBuilt.CyNetTools.Plugins.AvailablePlugin" /> to remove from the collection.
+            </param>
+    </member>
+    <member name="T:CyrusBuilt.CyNetTools.Plugins.DuplicatePluginInstanceException">
+      <summary>
+            The exception that is thrown when a duplicate plugin instance is detected.
+            </summary>
+    </member>
+    <member name="M:CyrusBuilt.CyNetTools.Plugins.DuplicatePluginInstanceException.#ctor(CyrusBuilt.CyNetTools.Plugins.IPlugin)">
+      <summary>
+            Initializes a new instance of the <b>CyrusBuilt.CyNetTools.Plugins.DuplicatePluginInstanceException</b>
+            class with the plugin that is a duplicate.
+            </summary>
+      <param name="plugin">
+            The plugin that is an instance duplicate of another.
+            </param>
+    </member>
+    <member name="P:CyrusBuilt.CyNetTools.Plugins.DuplicatePluginInstanceException.PluginDuplicate">
+      <summary>
+            Gets the plugin duplicate.
+            </summary>
+    </member>
+    <member name="T:CyrusBuilt.CyNetTools.Plugins.FormChangeValue">
+      <summary>
+            Settings value change form.
+            </summary>
+    </member>
+    <member name="M:CyrusBuilt.CyNetTools.Plugins.FormChangeValue.#ctor(System.String,System.Object)">
+      <summary>
+            Initializes a new instance of the <b>CyrusBuilt.CyNetTools.Plugins.FormChangeValue</b>
+            class with the name of the setting (key) to change and the value
+            to set.
+            </summary>
+      <param name="key">
+            The name of the setting to change.
+            </param>
+      <param name="value">
+            The value to assign to the setting.
+            </param>
+    </member>
+    <member name="M:CyrusBuilt.CyNetTools.Plugins.FormChangeValue.Dispose(System.Boolean)">
+      <summary>
+            Clean up any resources being used.
+            </summary>
+      <param name="disposing">true if managed resources should be disposed; otherwise, false.</param>
+    </member>
+    <member name="P:CyrusBuilt.CyNetTools.Plugins.FormChangeValue.Key">
+      <summary>
+            Gets the name of the setting being modified.
+            </summary>
+    </member>
+    <member name="P:CyrusBuilt.CyNetTools.Plugins.FormChangeValue.Value">
+      <summary>
+            Gets the value of the setting.
+            </summary>
+    </member>
+    <member name="T:CyrusBuilt.CyNetTools.Plugins.FormSettingsDialog">
+      <summary>
+            The plugin settings form. This displays the plugin's configuration and
+            provides a means of changing the values within.
+            </summary>
+    </member>
+    <member name="M:CyrusBuilt.CyNetTools.Plugins.FormSettingsDialog.#ctor(CyrusBuilt.CyNetTools.Plugins.AvailablePlugin)">
+      <summary>
+            Initializes a new instance of the <b>CyrusBuilt.CyNetTools.Plugins.FormSettingsDialog</b>
+            class with the plugin to load the configuration from.
+            </summary>
+      <param name="plugin">
+            The plugin to load the configuration from.
+            </param>
+    </member>
+    <member name="P:CyrusBuilt.CyNetTools.Plugins.FormSettingsDialog.Configuration">
+      <summary>
+            Gets the loaded (or modified) configuration.
+            </summary>
+    </member>
+    <member name="M:CyrusBuilt.CyNetTools.Plugins.FormSettingsDialog.Dispose(System.Boolean)">
+      <summary>
+            Clean up any resources being used.
+            </summary>
+      <param name="disposing">true if managed resources should be disposed; otherwise, false.</param>
+    </member>
+    <member name="T:CyrusBuilt.CyNetTools.Plugins.IPlugin">
+      <summary>
+            A plugin interface. All classes representing listener plugins for the
+            Event Dispatch Coordinator must contain a type that implements this
+            interface.
+            </summary>
+    </member>
+    <member name="P:CyrusBuilt.CyNetTools.Plugins.IPlugin.Author">
+      <summary>
+            Gets the plugin's author.
+            </summary>
+    </member>
+    <member name="P:CyrusBuilt.CyNetTools.Plugins.IPlugin.Copyright">
+      <summary>
+            Gets the plugin's copyright info.
+            </summary>
+    </member>
+    <member name="P:CyrusBuilt.CyNetTools.Plugins.IPlugin.Description">
+      <summary>
+            Gets a decription of the plugin.
+            </summary>
+    </member>
+    <member name="M:CyrusBuilt.CyNetTools.Plugins.IPlugin.GetConfiguration">
+      <summary>
+            Gets the plugin's configuration.
+            </summary>
+      <returns>
+            The plugin configuration.
+            </returns>
+    </member>
+    <member name="P:CyrusBuilt.CyNetTools.Plugins.IPlugin.Host">
+      <summary>
+            Gets or sets plugin host. This would be the application (class)
+            that implements <see cref="T:CyrusBuilt.CyNetTools.Plugins.IPluginHost" /> for using this plugin.
+            </summary>
+    </member>
+    <member name="P:CyrusBuilt.CyNetTools.Plugins.IPlugin.Index">
+      <summary>
+            Gets or sets the instance index. This is useful for save file dialogs.
+            </summary>
+    </member>
+    <member name="M:CyrusBuilt.CyNetTools.Plugins.IPlugin.Initialize">
+      <summary>
+            Initializes the plugin.
+            </summary>
+    </member>
+    <member name="P:CyrusBuilt.CyNetTools.Plugins.IPlugin.IsBusy">
+      <summary>
+            Gets a flag to indicate whether or no the plugin is busy processing.
+            </summary>
+    </member>
+    <member name="P:CyrusBuilt.CyNetTools.Plugins.IPlugin.IsDisposed">
+      <summary>
+            Gets whether or not the plugin instance is disposed.
+            </summary>
+    </member>
+    <member name="P:CyrusBuilt.CyNetTools.Plugins.IPlugin.IsInitialized">
+      <summary>
+            Gets a flag to indicate whether or not the plugin has been
+            initialized.
+            </summary>
+    </member>
+    <member name="P:CyrusBuilt.CyNetTools.Plugins.IPlugin.Name">
+      <summary>
+            Gets the name of the plugin.
+            </summary>
+    </member>
+    <member name="M:CyrusBuilt.CyNetTools.Plugins.IPlugin.SaveConfiguration(CyrusBuilt.CyNetTools.Plugins.PluginConfiguration)">
+      <summary>
+            Saves the plugin's configuration.
+            </summary>
+      <param name="config">
+            The plugin configuration to save to the plugin's configuration file.
+            </param>
+    </member>
+    <member name="M:CyrusBuilt.CyNetTools.Plugins.IPlugin.ShowUI(System.Windows.Forms.Form)">
+      <summary>
+            Displays the main form of the plugin's UI.
+            </summary>
+      <param name="mdiParent">
+            The form that is the MDI parent of the plugin's main UI form.
+            </param>
+      <returns>
+            A reference to the displayed form.
+            </returns>
+    </member>
+    <member name="P:CyrusBuilt.CyNetTools.Plugins.IPlugin.Tag">
+      <summary>
+            Gets or sets the object to tag this instance with.
+            </summary>
+    </member>
+    <member name="P:CyrusBuilt.CyNetTools.Plugins.IPlugin.Version">
+      <summary>
+            Gets the plugin version.
+            </summary>
+    </member>
+    <member name="T:CyrusBuilt.CyNetTools.Plugins.IPluginHost">
+      <summary>
+            A plugin host interface. Any type that will act as a host for plugin
+            assemblies must implement this interface.
+            </summary>
+    </member>
+    <member name="M:CyrusBuilt.CyNetTools.Plugins.IPluginHost.GetConfigurationDialog(CyrusBuilt.CyNetTools.Plugins.AvailablePlugin)">
+      <summary>
+            Gets the plugin's configuration dialog.
+            </summary>
+      <param name="plugin">
+            The plugin to get the configuration from.
+            </param>
+      <returns>
+            A dialog form containing the settings read from the specified
+            plugin's configuration.
+            </returns>
+    </member>
+    <member name="M:CyrusBuilt.CyNetTools.Plugins.IPluginHost.Initialize">
+      <summary>
+            Initializes the plugin host. This will perform necessary tasks for
+            initializing plugin reference storage.
+            </summary>
+    </member>
+    <member name="M:CyrusBuilt.CyNetTools.Plugins.IPluginHost.LoadPluginConfiguration(CyrusBuilt.CyNetTools.Plugins.IPlugin)">
+      <summary>
+            Loads the specified plugin's configuration.
+            </summary>
+      <param name="plugin">
+            The plugin to load the configuration from.
+            </param>
+      <returns>
+            If successful, the plugin's configuration; Otherwise, null. A null
+            return can occur if the specified plugin does not have any settings
+            to configure.
+            </returns>
+    </member>
+    <member name="M:CyrusBuilt.CyNetTools.Plugins.IPluginHost.SavePluginConfiguration(CyrusBuilt.CyNetTools.Plugins.IPlugin,CyrusBuilt.CyNetTools.Plugins.PluginConfiguration)">
+      <summary>
+            Saves the specified plugin's configuration.
+            </summary>
+      <param name="plugin">
+            The plugin containing the configuration to save.
+            </param>
+      <param name="config">
+            The configuration to save.
+            </param>
+    </member>
+    <member name="T:CyrusBuilt.CyNetTools.Plugins.PluginBase">
+      <summary>
+            Base class for CyNetTools plugins.
+            </summary>
+    </member>
+    <member name="M:CyrusBuilt.CyNetTools.Plugins.PluginBase.#ctor">
+      <summary>
+            Initializes a new instance of the <b>CyrusBuilt.CyNetTools.Plugins.PluginBase</b>
+            class. This is the default constructor.
+            </summary>
+    </member>
+    <member name="P:CyrusBuilt.CyNetTools.Plugins.PluginBase.Author">
+      <summary>
+            ets the plugin's author.
+            </summary>
+    </member>
+    <member name="P:CyrusBuilt.CyNetTools.Plugins.PluginBase.Copyright">
+      <summary>
+            Gets the copyright.
+            </summary>
+    </member>
+    <member name="P:CyrusBuilt.CyNetTools.Plugins.PluginBase.Description">
+      <summary>
+            Gets a decription of the plugin.
+            </summary>
+    </member>
+    <member name="M:CyrusBuilt.CyNetTools.Plugins.PluginBase.Dispose">
+      <summary>
+            Releases all resources used by this component.
+            </summary>
+    </member>
+    <member name="M:CyrusBuilt.CyNetTools.Plugins.PluginBase.GetConfiguration">
+      <summary>
+            In a derived class, gets the plugin's configuration.
+            </summary>
+      <returns>
+            The plugin configuration.
+            </returns>
+    </member>
+    <member name="P:CyrusBuilt.CyNetTools.Plugins.PluginBase.Host">
+      <summary>
+            Gets or sets plugin host. This would be the application (class)
+            that implements <see cref="T:CyrusBuilt.CyNetTools.Plugins.IPluginHost" /> for using this plugin.
+            </summary>
+    </member>
+    <member name="P:CyrusBuilt.CyNetTools.Plugins.PluginBase.Index">
+      <summary>
+            Gets or sets the instance index. This is useful for save file dialogs.
+            </summary>
+    </member>
+    <member name="M:CyrusBuilt.CyNetTools.Plugins.PluginBase.Initialize">
+      <summary>
+            Initializes the plugin.
+            </summary>
+      <exception cref="T:System.ObjectDisposedException">
+            This instance has been disposed and cannot be initialized.
+            </exception>
+    </member>
+    <member name="P:CyrusBuilt.CyNetTools.Plugins.PluginBase.IsBusy">
+      <summary>
+            Gets a flag indicating whether or not the plugin is busy.
+            </summary>
+    </member>
+    <member name="P:CyrusBuilt.CyNetTools.Plugins.PluginBase.IsDisposed">
+      <summary>
+            Checks to see if the plugin instance has been disposed.
+            </summary>
+    </member>
+    <member name="P:CyrusBuilt.CyNetTools.Plugins.PluginBase.IsInitialized">
+      <summary>
+            Gets a flag to indicate whether or not the plugin has been
+            initialized.
+            </summary>
+    </member>
+    <member name="P:CyrusBuilt.CyNetTools.Plugins.PluginBase.Name">
+      <summary>
+            Gets the name of the plugin.
+            </summary>
+    </member>
+    <member name="M:CyrusBuilt.CyNetTools.Plugins.PluginBase.SaveConfiguration(CyrusBuilt.CyNetTools.Plugins.PluginConfiguration)">
+      <summary>
+            In a derived class, saves the plugin's configuration.
+            </summary>
+      <param name="config">
+            The plugin configuration to save to the plugin's configuration file.
+            </param>
+    </member>
+    <member name="M:CyrusBuilt.CyNetTools.Plugins.PluginBase.ShowUI(System.Windows.Forms.Form)">
+      <summary>
+            In a derived class, displays the main form of the plugin's UI.
+            </summary>
+      <param name="mdiParent">
+            The form that is the MDI parent of the plugin's main UI form.
+            </param>
+      <returns>
+            A reference to the displayed form.
+            </returns>
+    </member>
+    <member name="P:CyrusBuilt.CyNetTools.Plugins.PluginBase.Tag">
+      <summary>
+            Gets or sets the object to tag this instance with.
+            </summary>
+    </member>
+    <member name="P:CyrusBuilt.CyNetTools.Plugins.PluginBase.Version">
+      <summary>
+            Gets the plugin version.
+            </summary>
+    </member>
+    <member name="T:CyrusBuilt.CyNetTools.Plugins.PluginConfiguration">
+      <summary>
+            Configuration storage for plugin settings using key/value pairs.
+            </summary>
+    </member>
+    <member name="M:CyrusBuilt.CyNetTools.Plugins.PluginConfiguration.#ctor">
+      <summary>
+            Initializes a new instance of the <b>MAT.EventDispatchCoordinator.Plugins.PluginConfiguration</b>
+            class. This is the default constructor.
+            </summary>
+    </member>
+    <member name="M:CyrusBuilt.CyNetTools.Plugins.PluginConfiguration.AddConfigurationSetting(System.String,System.Object)">
+      <summary>
+            Adds a setting to the configuration. If the specified setting
+            already exists, then this will simply assign its value.
+            </summary>
+      <param name="key">
+            The name of the setting (key).
+            </param>
+      <param name="value">
+            The value of the setting.
+            </param>
+      <exception cref="T:System.ObjectDisposedException">
+            This instance hass been disposed.
+            </exception>
+    </member>
+    <member name="P:CyrusBuilt.CyNetTools.Plugins.PluginConfiguration.AllKeys">
+      <summary>
+            Gets a collection of the names of all the settings (keys) in the
+            backing store.
+            </summary>
+    </member>
+    <member name="M:CyrusBuilt.CyNetTools.Plugins.PluginConfiguration.Clear">
+      <summary>
+            Clears the values of all settings in this configuration instance.
+            </summary>
+    </member>
+    <member name="M:CyrusBuilt.CyNetTools.Plugins.PluginConfiguration.ClearDirty">
+      <summary>
+            Clears the dirty flag. This method should be called *after* the
+            settings have been persisted. If called before, any class
+            implementing <see cref="T:CyrusBuilt.CyNetTools.Plugins.IPlugin" /> that only saves changes based
+            on whether or not the configuration is dirty may not pickup changes
+            that have been made.
+            </summary>
+    </member>
+    <member name="M:CyrusBuilt.CyNetTools.Plugins.PluginConfiguration.CopyFromConfig(CyrusBuilt.CyNetTools.Plugins.PluginConfiguration)">
+      <summary>
+            Copies configuration values from the specified configuration if the
+            specified config contains matching settings.
+            </summary>
+      <param name="config">
+            The configuration to copy values from.
+            </param>
+      <exception cref="T:System.ObjectDisposedException">
+            This instance hass been disposed.
+            </exception>
+    </member>
+    <member name="M:CyrusBuilt.CyNetTools.Plugins.PluginConfiguration.Dispose">
+      <summary>
+            Disposes of all managed resources used by this component.
+            </summary>
+    </member>
+    <member name="M:CyrusBuilt.CyNetTools.Plugins.PluginConfiguration.GetValue(System.String)">
+      <summary>
+            Gets the value of a setting.
+            </summary>
+      <param name="key">
+            The setting to retrieve the value from.
+            </param>
+      <returns>
+            If successful, the value of the setting; Otherwise, null.
+            </returns>
+      <exception cref="T:System.ObjectDisposedException">
+            This instance hass been disposed.
+            </exception>
+    </member>
+    <member name="P:CyrusBuilt.CyNetTools.Plugins.PluginConfiguration.IsDirty">
+      <summary>
+            Gets a value indicating whether or not changes have been made to
+            one or more settings that has not yet been saved.
+            </summary>
+    </member>
+    <member name="P:CyrusBuilt.CyNetTools.Plugins.PluginConfiguration.IsDisposed">
+      <summary>
+            Gets a value indicating whether or not this instance has been
+            disposed and now in an unusable state.
+            </summary>
+    </member>
+    <member name="P:CyrusBuilt.CyNetTools.Plugins.PluginConfiguration.IsEmpty">
+      <summary>
+            Gets a value indicating whether or not the backing store contains
+            any settings.
+            </summary>
+    </member>
+    <member name="M:CyrusBuilt.CyNetTools.Plugins.PluginConfiguration.ReadFromFile(System.IO.FileInfo)">
+      <summary>
+            Reads the plugin configuration from file.
+            </summary>
+      <param name="config">
+            The configuration file to read.
+            </param>
+      <exception cref="T:System.IO.FileNotFoundException">
+            The configuration file does not exist.
+            </exception>
+    </member>
+    <member name="M:CyrusBuilt.CyNetTools.Plugins.PluginConfiguration.SaveToFile(System.IO.FileInfo,System.Type)">
+      <summary>
+            Perists the plugin configuration data to disk.
+            </summary>
+      <param name="config">
+            The file holding the plugin configuration data.
+            </param>
+      <param name="t">
+            The type of the plugin.
+            </param>
+      <exception cref="T:System.IO.FileNotFoundException">
+            The configuration file does not exist.
+            </exception>
+    </member>
+    <member name="M:CyrusBuilt.CyNetTools.Plugins.PluginConfiguration.SetValue(System.String,System.Object)">
+      <summary>
+            Sets the value of a setting.
+            </summary>
+      <param name="key">
+            The name of the setting to assign a value to.
+            </param>
+      <param name="value">
+            The value to set.
+            </param>
+      <exception cref="T:System.ObjectDisposedException">
+            This instance hass been disposed.
+            </exception>
+      <exception cref="T:System.ArgumentException"></exception>
+    </member>
+    <member name="T:CyrusBuilt.CyNetTools.Plugins.PluginManager">
+      <summary>
+            Manages the locating, loading, and unloading of plugins. This class is
+            a singleton because there should only be one plugin manager instance
+            for the entire lifetime of the application.
+            </summary>
+    </member>
+    <member name="P:CyrusBuilt.CyNetTools.Plugins.PluginManager.AvailablePlugins">
+      <summary>
+            Gets the collection of all plugins found and loaded by the
+            <see cref="M:CyrusBuilt.CyNetTools.Plugins.PluginManager.FindPlugins" /> method.
+            </summary>
+    </member>
+    <member name="M:CyrusBuilt.CyNetTools.Plugins.PluginManager.ClosePlugins">
+      <summary>
+            Closes all loaded plugins.
+            </summary>
+    </member>
+    <member name="M:CyrusBuilt.CyNetTools.Plugins.PluginManager.Dispose">
+      <summary>
+            Decrements the count of references to this class, then releases
+            all resources used by this class when all other references have
+            been disposed. Managed resources are disposed first.
+            </summary>
+    </member>
+    <member name="M:CyrusBuilt.CyNetTools.Plugins.PluginManager.FindPlugins">
+      <summary>
+            Finds and loads plugins located in the same directory as this
+            assembly.
+            </summary>
+    </member>
+    <member name="M:CyrusBuilt.CyNetTools.Plugins.PluginManager.FindPlugins(System.IO.DirectoryInfo)">
+      <summary>
+            Finds and loads plugins located in the specified directory.
+            </summary>
+      <param name="directory">
+            The directory where the plugins are located.
+            </param>
+      <exception cref="T:System.InvalidOperationException">
+            The plugin manager is not intialized.
+            </exception>
+    </member>
+    <member name="E:CyrusBuilt.CyNetTools.Plugins.PluginManager.FoundPlugin">
+      <summary>
+            Occurs when a plugin is found.
+            </summary>
+    </member>
+    <member name="M:CyrusBuilt.CyNetTools.Plugins.PluginManager.GetConfigurationDialog(CyrusBuilt.CyNetTools.Plugins.AvailablePlugin)">
+      <summary>
+            Gets the plugin's configuration dialog.
+            </summary>
+      <param name="plugin">
+            The plugin to get the configuration from.
+            </param>
+      <returns>
+            A dialog form containing the settings read from the specified
+            plugin's configuration.
+            </returns>
+      <exception cref="T:System.ArgumentNullException">
+        <paramref name="plugin" /> cannot be null.
+            </exception>
+    </member>
+    <member name="M:CyrusBuilt.CyNetTools.Plugins.PluginManager.Initialize">
+      <summary>
+            Initializes the plugin manager.
+            </summary>
+    </member>
+    <member name="P:CyrusBuilt.CyNetTools.Plugins.PluginManager.Instance">
+      <summary>
+            Gaurantees a singleton instance of this class (thread safe).
+            </summary>
+      <returns>
+            The first call to this instantiator will return a new instance of this
+            class object.  Any additional calls that follow will return a reference
+            to the already created object instance (double-check locking method).
+            </returns>
+    </member>
+    <member name="M:CyrusBuilt.CyNetTools.Plugins.PluginManager.LoadPluginConfiguration(CyrusBuilt.CyNetTools.Plugins.IPlugin)">
+      <summary>
+            Loads the specified plugin's configuration.
+            </summary>
+      <param name="plugin">
+            The plugin to load the configuration from.
+            </param>
+      <returns>
+            If successful, the plugin's configuration; Otherwise, null. A null
+            return can occur if the specified plugin does not have any settings
+            to configure.
+            </returns>
+      <exception cref="T:System.ArgumentNullException">
+        <paramref name="plugin" /> cannot be null.
+            </exception>
+    </member>
+    <member name="E:CyrusBuilt.CyNetTools.Plugins.PluginManager.PluginLoaded">
+      <summary>
+            Occurs when a plugin is loaded.
+            </summary>
+    </member>
+    <member name="M:CyrusBuilt.CyNetTools.Plugins.PluginManager.SavePluginConfiguration(CyrusBuilt.CyNetTools.Plugins.IPlugin,CyrusBuilt.CyNetTools.Plugins.PluginConfiguration)">
+      <summary>
+            Saves the specified plugin's configuration.
+            </summary>
+      <param name="plugin">
+            The plugin containing the configuration to save.
+            </param>
+      <param name="config">
+            The configuration to save.
+            </param>
+      <exception cref="T:System.ArgumentNullException">
+        <paramref name="plugin" /> cannot be null.
+            </exception>
+    </member>
+    <member name="P:CyrusBuilt.CyNetTools.Plugins.PluginManager.StartupPath">
+      <summary>
+            Gets the full path to the directory where the plugin manager assembly is located.
+            </summary>
+    </member>
+    <member name="T:CyrusBuilt.CyNetTools.Plugins.Events.FoundPluginEventArgs">
+      <summary>
+            Plugin found event arguments class.
+            </summary>
+    </member>
+    <member name="M:CyrusBuilt.CyNetTools.Plugins.Events.FoundPluginEventArgs.#ctor(System.String)">
+      <summary>
+            Initializes a new instance of the <b>CyrusBuilt.CyNetTools.Plugins.Events.FoundPluginEventArgs</b>
+            class with the full path to the plugin assembly found.
+            </summary>
+      <param name="assemblyPath">
+            The full path to the plugin assembly.
+            </param>
+    </member>
+    <member name="P:CyrusBuilt.CyNetTools.Plugins.Events.FoundPluginEventArgs.AssemblyPath">
+      <summary>
+            Gets the full path to the plugin assembly.
+            </summary>
+    </member>
+    <member name="T:CyrusBuilt.CyNetTools.Plugins.Events.FoundPluginEventHandler">
+      <summary>
+            Handler delegate for plugin found events.
+            </summary>
+      <param name="sender">
+            A reference to the object firing the event.
+            </param>
+      <param name="e">
+            The event arguments.
+            </param>
+    </member>
+    <member name="T:CyrusBuilt.CyNetTools.Plugins.Events.PluginLoadedEventArgs">
+      <summary>
+            Plugin loaded event arguments class.
+            </summary>
+    </member>
+    <member name="M:CyrusBuilt.CyNetTools.Plugins.Events.PluginLoadedEventArgs.#ctor(System.String,System.Version)">
+      <summary>
+            Initializes a new instance of the <b>CyrusBuilt.CyNetTools.Plugins.Events.PluginLoadedEventArgs</b>
+            class with the name and version of the plugin.
+            </summary>
+      <param name="name">
+            The plugin name.
+            </param>
+      <param name="v">
+            The plugin version.
+            </param>
+    </member>
+    <member name="P:CyrusBuilt.CyNetTools.Plugins.Events.PluginLoadedEventArgs.Name">
+      <summary>
+            Gets the plugin name.
+            </summary>
+    </member>
+    <member name="P:CyrusBuilt.CyNetTools.Plugins.Events.PluginLoadedEventArgs.PluginVersion">
+      <summary>
+            Gets the plugin version.
+            </summary>
+    </member>
+    <member name="T:CyrusBuilt.CyNetTools.Plugins.Events.PluginLoadedEventHandler">
+      <summary>
+            Handler delegate for plugin loaded events.
+            </summary>
+      <param name="sender">
+            A reference to the object firing the event.
+            </param>
+      <param name="e">
+            The event arguments.
+            </param>
+    </member>
+  </members>
+</doc>

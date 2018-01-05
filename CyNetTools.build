@@ -1,0 +1,89 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<!-- NAnt build script for CyNetTools. -->
+<project name="CyNetTools" default="build-debug">
+  <include buildfile="./build.properties" verbose="true" failonerror="true"/>
+  <property name="result" value="0"/>
+  <property name="msg" value=""/>
+
+  <!-- Utility target for printing messages. You have to set the ${msg} property
+  before using. -->
+  <target name="printMessage" unless="${string::get-length(msg) == 0}">
+    <echo message=""/>
+    <echo message="*********************************"/>
+    <echo message="${msg}"/>
+    <echo message="*********************************"/>
+    <echo message=""/>
+  </target>
+  
+  <!-- Init the build cycle -->
+  <target name ="init" description="Initialization">
+    <property name="msg" value="Initializing build..."/>
+    <call target="printMessage"/>
+    <tstamp property="build.date" pattern="yyyyMMdd" verbose="true"/>
+  </target>
+  
+  <!-- Clean all build targets -->
+  <target name="clean" depends="init" description="Clean build targets">
+    <property name="msg" value="Cleaning build targets..."/>
+    <call target="printMessage"/>
+    <delete dir="${plugin.dir}" verbose="true" if="${directory::exists(plugin.dir)}"/>
+    <delete dir="${build.dir}" verbose="true" if="${directory::exists(build.dir)}" failonerror="false"/>
+    <delete dir="${plugins.build.dir}" verbose="true" if="${directory::exists(plugins.build.dir)}"/>
+    <delete dir="${core.build.dir}" verbose="true" if="${directory::exists(core.build.dir)}"/>
+  </target>
+  
+  <!-- Prepare for debug build -->
+  <target name="debug">
+    <property name="build.config" value="debug"/>
+    <property name="debug" value="true"/>
+    <property name="optimize" value="false"/>
+    <property name="build.dir" value="${basename}\bin\Debug"/>
+    <property name="plugin.dir" value="${build.dir}\plugins"/>
+    <property name="core.build.dir" value="${core.project.name}\bin\Debug"/>
+    <property name="plugins.build.dir" value="${plugins.project.name}\bin\Debug"/>
+  </target>
+  
+  <!-- Prepare for release build -->
+  <target name="release">
+    <property name="build.config" value="release"/>
+    <property name="debug" value="false"/>
+    <property name="optimize" value="true"/>
+    <property name="build.dir" value="${basename}\bin\Release"/>
+    <property name="plugin.dir" value="${build.dir}\plugins"/>
+    <property name="core.build.dir" value="${core.project.name}\bin\Release"/>
+    <property name="plugins.build.dir" value="${plugins.project.name}\bin\Release"/>
+  </target>
+  
+  <!-- Build the entire solution -->
+  <target name="build" description="Build all projects">
+    <property name="msg" value="Beginning build of all projects..."/>
+    <call target="printMessage"/>
+    <mkdir dir="${build.dir}" verbose="true" unless="${directory::exists(build.dir)}"/>
+    <mkdir dir="${plugin.dir}" verbose="true" unless="${directory::exists(plugin.dir)}"/>
+    <mkdir dir="${plugins.build.dir}" verbose="true" unless="${directory::exists(plugins.build.dir)}"/>
+    <mkdir dir="${core.build.dir}" verbose="true" unless="${directory::exists(core.build.dir)}"/>
+
+    <!-- We will call msbuild directly to guarantee compile success as it does -->
+    <!-- in VS. This currently does not compile correctly using the solution task. -->
+    <property name="msbuild.path" value="${environment::get-folder-path('Windows')}/Microsoft.NET/Framework/v4.0.30319/msbuild.exe"/>
+    <echo message="Checking for MSBUILD..."/>
+    <if test="${not file::exists(msbuild.path)}">
+      <fail message="ERROR: msbuild could not be found."/>
+    </if>
+
+    <!-- Call msbuild to compile the entire solution -->
+    <exec program="${msbuild.path}" failonerror="true" verbose="true">
+      <arg line='"${solution.file}"'/>
+      <arg value="/P:Configuration=${build.config}"/>
+      <arg value="/target:Rebuild"/>
+      <arg value="/verbosity:normal"/>
+      <arg value="/nologo"/>
+    </exec>
+  </target>
+
+  <!-- Perform debug build of entire solution -->
+  <target name="build-debug" depends="debug,clean,build" description="Debug build"/>
+  
+  <!-- Perform release build of entire solution -->
+  <target name="build-release" depends="release,clean,build" description="Release build"/>
+</project>

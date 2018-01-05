@@ -1,0 +1,90 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProductVersion>8.0.30703</ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{EF022A7C-8DBE-451D-9100-EDBACBB08125}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>CyrusBuilt.CyNetTools.Core</RootNamespace>
+    <AssemblyName>CyrusBuilt.CyNetTools.Core</AssemblyName>
+    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <TargetFrameworkProfile />
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <DocumentationFile>bin\Debug\CyrusBuilt.CyNetTools.Core.XML</DocumentationFile>
+    <Prefer32Bit>false</Prefer32Bit>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <Prefer32Bit>false</Prefer32Bit>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="System" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Arp\ArpCommand.cs" />
+    <Compile Include="Arp\ArpModule.cs" />
+    <Compile Include="Arp\ArpUtils.cs" />
+    <Compile Include="EventHandlerDelegates.cs" />
+    <Compile Include="ExternalToolBase.cs" />
+    <Compile Include="IExternalTool.cs" />
+    <Compile Include="IPConfig\IpConfigCommand.cs" />
+    <Compile Include="IPConfig\IPConfigModule.cs" />
+    <Compile Include="IPConfig\IpConfigUtils.cs" />
+    <Compile Include="IPVersion.cs" />
+    <Compile Include="Netstat\ConnectionProtocol.cs" />
+    <Compile Include="Netstat\NetstatModule.cs" />
+    <Compile Include="Netstat\NetstatUtils.cs" />
+    <Compile Include="Netstat\StatsProtocol.cs" />
+    <Compile Include="NetworkUtils.cs" />
+    <Compile Include="Net\NetToolBase.cs" />
+    <Compile Include="Net\NetViewModule.cs" />
+    <Compile Include="Ping\PingErrorCodes.cs" />
+    <Compile Include="Ping\PingEventDelegates.cs" />
+    <Compile Include="Ping\PingModule.cs" />
+    <Compile Include="Ping\PingProgressEventArgs.cs" />
+    <Compile Include="Ping\PingUtils.cs" />
+    <Compile Include="Ping\RouteMode.cs" />
+    <Compile Include="ProccessDoneEventArgs.cs" />
+    <Compile Include="ProcessCancelledEventArgs.cs" />
+    <Compile Include="ProcessOutputEventArgs.cs" />
+    <Compile Include="ProcessStartedEventArgs.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="TraceRoute\TraceEventDelegates.cs" />
+    <Compile Include="TraceRoute\TraceProgressEventArgs.cs" />
+    <Compile Include="TraceRoute\TraceRouteModule.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="NsLookup\" />
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>

@@ -1,0 +1,1676 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<doc>
+  <assembly>
+    <name>CyrusBuilt.CyNetTools.Core</name>
+  </assembly>
+  <members>
+    <member name="T:CyrusBuilt.CyNetTools.Core.ExternalToolBase">
+      <summary>
+            Base implementation of the <see cref="T:CyrusBuilt.CyNetTools.Core.IExternalTool" /> interface. This
+            is a base class and is intended to implemented by classes that act as
+            wrappers for external tool processes (ie. ping.exe).  Specifically, this
+            class should be used in implementations that wrap command-line (CLI)
+            executables (or scripts) whose output can then be read and interpreted
+            by the implementation.
+            </summary>
+    </member>
+    <member name="M:CyrusBuilt.CyNetTools.Core.ExternalToolBase.#ctor">
+      <summary>
+            Initializes a new instance of the <b>CyrusBuilt.CyNetTools.Core.ExternalToolBase</b>
+            class. This is the default constructor.
+            </summary>
+    </member>
+    <member name="M:CyrusBuilt.CyNetTools.Core.ExternalToolBase.Cancel">
+      <summary>
+            Cancels the current process if it is running. This will attempt to
+            gracefully terminate the process first, and then force-kill the
+            process if graceful termination fails. This method is intended to
+            be overridden by the implementing class to terminate the underlying
+            process and then call this base method prior to return to the caller
+            in order to set the cancel flag. This method contains no process
+            termination logic of its own.
+            </summary>
+    </member>
+    <member name="M:CyrusBuilt.CyNetTools.Core.ExternalToolBase.Dispose">
+      <summary>
+            Releases all resources used by this component. This method is
+            intended to be overridden in the implementing class, and then
+            called by the overriding method to set the disposal flag prior
+            to returning to the caller.
+            </summary>
+    </member>
+    <member name="P:CyrusBuilt.CyNetTools.Core.ExternalToolBase.ExitCode">
+      <summary>
+            Gets the exit code returned by the process. Always returns zero
+            until the process terminates.
+            </summary>
+    </member>
+    <member name="P:CyrusBuilt.CyNetTools.Core.ExternalToolBase.IsDisposed">
+      <summary>
+            Gets whether or not this instance has been disposed.
+            </summary>
+    </member>
+    <member name="P:CyrusBuilt.CyNetTools.Core.ExternalToolBase.IsRunning">
+      <summary>
+            Gets whether or not the process is running.
+            </summary>
+    </member>
+    <member name="M:CyrusBuilt.CyNetTools.Core.ExternalToolBase.OnOutputReceived(CyrusBuilt.CyNetTools.Core.ProcessOutputEventArgs)">
+      <summary>
+            Raises the <see cref="E:CyrusBuilt.CyNetTools.Core.ExternalToolBase.OutputReceived" /> event.
+            </summary>
+      <param name="e">
+            The event arguments.
+            </param>
+    </member>
+    <member name="M:CyrusBuilt.CyNetTools.Core.ExternalToolBase.OnProcessCancelled(CyrusBuilt.CyNetTools.Core.ProcessCancelledEventArgs)">
+      <summary>
+            Raises the <see cref="E:CyrusBuilt.CyNetTools.Core.ExternalToolBase.ProcessCancelled" /> event.
+            </summary>
+      <param name="e">
+            The event arguments.
+            </param>
+    </member>
+    <member name="M:CyrusBuilt.CyNetTools.Core.ExternalToolBase.OnProcessFinished(CyrusBuilt.CyNetTools.Core.ProccessDoneEventArgs)">
+      <summary>
+            Raises the <see cref="E:CyrusBuilt.CyNetTools.Core.ExternalToolBase.ProcessFinished" /> event.
+            </summary>
+      <param name="e">
+            The event arguments.
+            </param>
+    </member>
+    <member name="M:CyrusBuilt.CyNetTools.Core.ExternalToolBase.OnProcessStarted(CyrusBuilt.CyNetTools.Core.ProcessStartedEventArgs)">
+      <summary>
+            Raises the <see cref="E:CyrusBuilt.CyNetTools.Core.ExternalToolBase.ProcessStarted" /> event.
+            </summary>
+      <param name="e">
+            The event arguments.
+            </param>
+    </member>
+    <member name="E:CyrusBuilt.CyNetTools.Core.ExternalToolBase.OutputReceived">
+      <summary>
+            Occurs when output is received from the process.
+            </summary>
+    </member>
+    <member name="M:CyrusBuilt.CyNetTools.Core.ExternalToolBase.Preflight">
+      <summary>
+            Performs any neccessary preflight work prior to process execution.
+            This method is intended to validate parameters and input and throw
+            the appropriate exception if any invalid parameter values are
+            detected or if the instance instance is in an invalid state.
+            </summary>
+    </member>
+    <member name="E:CyrusBuilt.CyNetTools.Core.ExternalToolBase.ProcessCancelled">
+      <summary>
+            Occurs when the process is cancelled.
+            </summary>
+    </member>
+    <member name="E:CyrusBuilt.CyNetTools.Core.ExternalToolBase.ProcessFinished">
+      <summary>
+            Occurs when the process completes.
+            </summary>
+    </member>
+    <member name="M:CyrusBuilt.CyNetTools.Core.ExternalToolBase.ProcessReader">
+      <summary>
+            Monitors the process and reads it's output. This method should only
+            execute in the reader thread.
+            </summary>
+    </member>
+    <member name="E:CyrusBuilt.CyNetTools.Core.ExternalToolBase.ProcessStarted">
+      <summary>
+            Occurs when the external process has started running.
+            </summary>
+    </member>
+    <member name="M:CyrusBuilt.CyNetTools.Core.ExternalToolBase.Start">
+      <summary>
+            Launches the external process on a separate thread. This base
+            implementation performs no real work other than setting the run
+            flag. This method is intended to be overridden in the implementing
+            class. This should create and run the thread that the external
+            process will run in, then call this base method prior to returning
+            to the caller.
+            </summary>
+    </member>
+    <member name="P:CyrusBuilt.CyNetTools.Core.ExternalToolBase.WasCancelled">
+      <summary>
+            Gets whether or not the process was cancelled by the user.
+            </summary>
+    </member>
+    <member name="T:CyrusBuilt.CyNetTools.Core.IExternalTool">
+      <summary>
+            This interface is intended to be implemented by all external tool wrappers.
+            All tool modules that execute external processes (especially to read
+            their output) should implement this interface. Most CyNetTools core tool
+            modules implement this and it is expected that most plugins will too.
+            </summary>
+    </member>
+    <member name="M:CyrusBuilt.CyNetTools.Core.IExternalTool.Cancel">
+      <summary>
+            Cancels the current process if it is running. This will attempt to
+            gracefully terminate the process first, and then force-kill the
+            process if graceful termination fails.
+            </summary>
+    </member>
+    <member name="P:CyrusBuilt.CyNetTools.Core.IExternalTool.ExitCode">
+      <summary>
+            Gets the exit code returned by the process. Always returns zero
+            until the process terminates.
+            </summary>
+    </member>
+    <member name="P:CyrusBuilt.CyNetTools.Core.IExternalTool.IsDisposed">
+      <summary>
+            Gets whether or not this instance has been disposed.
+            </summary>
+    </member>
+    <member name="P:CyrusBuilt.CyNetTools.Core.IExternalTool.IsRunning">
+      <summary>
+            Gets whether or not the process is running.
+            </summary>
+    </member>
+    <member name="E:CyrusBuilt.CyNetTools.Core.IExternalTool.OutputReceived">
+      <summary>
+            Occurs when output is received from the process.
+            </summary>
+    </member>
+    <member name="E:CyrusBuilt.CyNetTools.Core.IExternalTool.ProcessCancelled">
+      <summary>
+            Occurs when the process is cancelled.
+            </summary>
+    </member>
+    <member name="E:CyrusBuilt.CyNetTools.Core.IExternalTool.ProcessFinished">
+      <summary>
+            Occurs when the process completes.
+            </summary>
+    </member>
+    <member name="E:CyrusBuilt.CyNetTools.Core.IExternalTool.ProcessStarted">
+      <summary>
+            Occurs when the external process has started running.
+            </summary>
+    </member>
+    <member name="M:CyrusBuilt.CyNetTools.Core.IExternalTool.Start">
+      <summary>
+            Launches the external process on a separate thread.
+            </summary>
+    </member>
+    <member name="P:CyrusBuilt.CyNetTools.Core.IExternalTool.WasCancelled">
+      <summary>
+            Gets whether or not the process was cancelled by the user.
+            </summary>
+    </member>
+    <member name="T:CyrusBuilt.CyNetTools.Core.IPVersion">
+      <summary>
+            IP protocol versions.
+            </summary>
+    </member>
+    <member name="F:CyrusBuilt.CyNetTools.Core.IPVersion.IPv4">
+      <summary>
+            IP protocol version 4.
+            </summary>
+    </member>
+    <member name="F:CyrusBuilt.CyNetTools.Core.IPVersion.IPv6">
+      <summary>
+            IP protocol version 6.
+            </summary>
+    </member>
+    <member name="T:CyrusBuilt.CyNetTools.Core.NetworkUtils">
+      <summary>
+            Network utility methods.
+            </summary>
+    </member>
+    <member name="M:CyrusBuilt.CyNetTools.Core.NetworkUtils.GetNetworkAdapters">
+      <summary>
+            Gets a list of network adapters that are up (enabled and have link)
+            and are IP-enabled (ethernet, VPN, WiFi).
+            </summary>
+      <returns>
+            The list of available network adapters.
+            </returns>
+    </member>
+    <member name="T:CyrusBuilt.CyNetTools.Core.ProccessDoneEventArgs">
+      <summary>
+            Process done event arguments class.
+            </summary>
+    </member>
+    <member name="M:CyrusBuilt.CyNetTools.Core.ProccessDoneEventArgs.#ctor(System.Int32)">
+      <summary>
+            Initializes a new instance of the <b>CyrusBuilt.CyNetTools.Core.ProccessDoneEventArgs</b>
+            class with the exit code returned by the process.
+            </summary>
+      <param name="exitCode">
+            The exit (status/error) code returned by the process.
+            </param>
+    </member>
+    <member name="M:CyrusBuilt.CyNetTools.Core.ProccessDoneEventArgs.#ctor(System.Int32,System.Boolean)">
+      <summary>
+            Initializes a new instance of the <b>CyrusBuilt.CyNetTools.Core.ProccessDoneEventArgs</b>
+            class with the exit code returned by the process and whether or not
+            the process was cancelled by the user.
+            </summary>
+      <param name="exitCode">
+            The exit (status/error) code returned by the process.
+            </param>
+      <param name="cancelled">
+            A flag indicating whether or not the process was cancelled.
+            </param>
+    </member>
+    <member name="P:CyrusBuilt.CyNetTools.Core.ProccessDoneEventArgs.Cancelled">
+      <summary>
+            Gets a flag indicating whether or not the process was cancelled.
+            </summary>
+    </member>
+    <member name="P:CyrusBuilt.CyNetTools.Core.ProccessDoneEventArgs.ExitCode">
+      <summary>
+            Gets the exit code returned by the process when it terminated.
+            </summary>
+    </member>
+    <member name="T:CyrusBuilt.CyNetTools.Core.ProcessCancelledEventArgs">
+      <summary>
+            Process cancelled event arguments class.
+            </summary>
+    </member>
+    <member name="M:CyrusBuilt.CyNetTools.Core.ProcessCancelledEventArgs.#ctor">
+      <summary>
+            Initializes a new instance of the <b>CyrusBuilt.CyNetTools.Core.ProcessCancelledEventArgs</b>
+            class. This is the default constructor.
+            </summary>
+    </member>
+    <member name="M:CyrusBuilt.CyNetTools.Core.ProcessCancelledEventArgs.#ctor(System.Exception)">
+      <summary>
+            Initializes a new instance of the <b>CyrusBuilt.CyNetTools.Core.ProcessCancelledEventArgs</b>
+            class with the exception that is the cause of the cancellation.
+            </summary>
+      <param name="cancelCause">
+            The exception that is the cause of the cancellation.
+            </param>
+    </member>
+    <member name="P:CyrusBuilt.CyNetTools.Core.ProcessCancelledEventArgs.CancelCause">
+      <summary>
+            Gets the exception that is the cause of the cancellation. Returns
+            null if not cancelled due to exception being thrown (user initiated
+            cancellation).
+            </summary>
+    </member>
+    <member name="F:CyrusBuilt.CyNetTools.Core.ProcessCancelledEventArgs.Empty">
+      <summary>
+            Provides a value to use with cancellation events that do not have
+            event data.
+            </summary>
+    </member>
+    <member name="T:CyrusBuilt.CyNetTools.Core.ProcessCancelledEventHandler">
+      <summary>
+            Process cancelled event handler delegate.
+            </summary>
+      <param name="sender">
+            The object that fired the event.
+            </param>
+      <param name="e">
+            The event arguments.
+            </param>
+    </member>
+    <member name="T:CyrusBuilt.CyNetTools.Core.ProcessDoneEventHandler">
+      <summary>
+            Process done event handler delegate.
+            </summary>
+      <param name="sender">
+            The object that fired the event.
+            </param>
+      <param name="e">
+            The event arguments.
+            </param>
+    </member>
+    <member name="T:CyrusBuilt.CyNetTools.Core.ProcessOutputEventArgs">
+      <summary>
+            Process output event arguments class.
+            </summary>
+    </member>
+    <member name="M:CyrusBuilt.CyNetTools.Core.ProcessOutputEventArgs.#ctor(System.String)">
+      <summary>
+            Initializes a new instance of the <b>CyrusBuilt.CyNetTools.Core.ProcessOutputEventArgs</b>
+            class with the output received from stdout and/or stderr.
+            </summary>
+      <param name="output">
+            The process output string.
+            </param>
+    </member>
+    <member name="P:CyrusBuilt.CyNetTools.Core.ProcessOutputEventArgs.StandardOutput">
+      <summary>
+            Gets the output returned by the process.
+            </summary>
+    </member>
+    <member name="T:CyrusBuilt.CyNetTools.Core.ProcessOutputEventHandler">
+      <summary>
+            Process output event handler delegate.
+            </summary>
+      <param name="sender">
+            The object that fired the event.
+            </param>
+      <param name="e">
+            The event arguments.
+            </param>
+    </member>
+    <member name="T:CyrusBuilt.CyNetTools.Core.ProcessRunningEventHandler">
+      <summary>
+            Process running event handler delegate.
+            </summary>
+      <param name="sender">
+            The object that fired the event.
+            </param>
+      <param name="e">
+            The event arguments.
+            </param>
+    </member>
+    <member name="T:CyrusBuilt.CyNetTools.Core.ProcessStartedEventArgs">
+      <summary>
+            Process started event arguments class.
+            </summary>
+    </member>
+    <member name="M:CyrusBuilt.CyNetTools.Core.ProcessStartedEventArgs.#ctor(System.Int32)">
+      <summary>
+            Initializes a new instance of the <b>CyrusBuilt.CyNetTools.Core.ProcessStartedEventArgs</b>
+            class with the process ID (PID).
+            </summary>
+      <param name="pid">
+            The ID of the process.
+            </param>
+    </member>
+    <member name="P:CyrusBuilt.CyNetTools.Core.ProcessStartedEventArgs.ProcessID">
+      <summary>
+            Gets the ID of the process (PID).
+            </summary>
+    </member>
+    <member name="T:CyrusBuilt.CyNetTools.Core.Arp.ArpCommand">
+      <summary>
+            Possible ARP commands.
+            </summary>
+    </member>
+    <member name="F:CyrusBuilt.CyNetTools.Core.Arp.ArpCommand.None">
+      <summary>
+            No ARP command. Just shows basic ARP table info.
+            </summary>
+    </member>
+    <member name="F:CyrusBuilt.CyNetTools.Core.Arp.ArpCommand.ShowAll">
+      <summary>
+            Displays current ARP entries by interrogating the current protocol
+            data. If an IP address is specified, the IP and Physical addresses
+            for only the specified host are displayed. If more than one network
+            interface uses ARP, entries for each ARP table are displayed.
+            </summary>
+    </member>
+    <member name="F:CyrusBuilt.CyNetTools.Core.Arp.ArpCommand.ShowForInterface">
+      <summary>
+            Displays the ARP entries for a specified network interface.
+            </summary>
+    </member>
+    <member name="F:CyrusBuilt.CyNetTools.Core.Arp.ArpCommand.AddHost">
+      <summary>
+            Adds a specified host and associates the IP address with a specified
+            Physical address. The Physical address is given as 6 hexadecimal bytes
+            separated by hyphens. The entry is permanent.
+            </summary>
+    </member>
+    <member name="F:CyrusBuilt.CyNetTools.Core.Arp.ArpCommand.DeleteHost">
+      <summary>
+            Deletes a host entry specified by a given IP address. Wildcards may
+            be used. Use "*" to delete all host entries.
+            </summary>
+    </member>
+    <member name="T:CyrusBuilt.CyNetTools.Core.Arp.ArpModule">
+      <summary>
+            Provides a threaded wrapper for the Microsoft ARP utility.
+            </summary>
+    </member>
+    <member name="M:CyrusBuilt.CyNetTools.Core.Arp.ArpModule.#ctor">
+      <summary>
+            Initializes a new instance of the <b>CyrusBuilt.CyNetTools.Core.Arp.ArpModule</b>
+            class. This is the default constructor.
+            </summary>
+    </member>
+    <member name="M:CyrusBuilt.CyNetTools.Core.Arp.ArpModule.Cancel">
+      <summary>
+            Cancels the current arp if it is running. This will attempt to
+            gracefully terminate the process first, and then force-kill the
+            process if graceful termination fails.
+            </summary>
+      <exception cref="T:System.ComponentModel.Win32Exception">
+            Unable to terminate process.
+            </exception>
+    </member>
+    <member name="P:CyrusBuilt.CyNetTools.Core.Arp.ArpModule.Command">
+      <summary>
+            Gets or sets the ARP command to execute. Default is <see cref="F:CyrusBuilt.CyNetTools.Core.Arp.ArpCommand.None" />
+            which will only show basic info.
+            </summary>
+    </member>
+    <member name="M:CyrusBuilt.CyNetTools.Core.Arp.ArpModule.Dispose">
+      <summary>
+            Releases all resources used by this component.
+            </summary>
+    </member>
+    <member name="M:CyrusBuilt.CyNetTools.Core.Arp.ArpModule.Dispose(System.Boolean)">
+      <summary>
+            Releases all resources used by this component.
+            </summary>
+      <param name="disposing">
+            Set true if disposing all managed resources.
+            </param>
+    </member>
+    <member name="P:CyrusBuilt.CyNetTools.Core.Arp.ArpModule.EthernetAddress">
+      <summary>
+            Used with <see cref="P:CyrusBuilt.CyNetTools.Core.Arp.ArpModule.Command" /> when the specified command
+            is <see cref="F:CyrusBuilt.CyNetTools.Core.Arp.ArpCommand.AddHost" />. This is the physical (ethernet)
+            address to associate with the specified <see cref="P:CyrusBuilt.CyNetTools.Core.Arp.ArpModule.InetAddress" />.
+            </summary>
+    </member>
+    <member name="M:CyrusBuilt.CyNetTools.Core.Arp.ArpModule.Finalize">
+      <summary>
+            Destructor.
+            </summary>
+    </member>
+    <member name="P:CyrusBuilt.CyNetTools.Core.Arp.ArpModule.InetAddress">
+      <summary>
+            Used with <see cref="P:CyrusBuilt.CyNetTools.Core.Arp.ArpModule.Command" /> to specify the internet
+            address to add or delete a host entry for.
+            </summary>
+    </member>
+    <member name="P:CyrusBuilt.CyNetTools.Core.Arp.ArpModule.InterfaceAddress">
+      <summary>
+            Gets or sets the internet address of the interface whose address
+            translation table should be modified. If null, the first applicable
+            interface will be used.
+            </summary>
+    </member>
+    <member name="M:CyrusBuilt.CyNetTools.Core.Arp.ArpModule.Preflight">
+      <summary>
+            Performs any neccessary preflight work prior to arp execution.
+            This method is intended to validate parameters and input and throw
+            the appropriate exception if any invalid parameter values are
+            detected or if the instance instance is in an invalid state.
+            </summary>
+      <exception cref="T:System.InvalidOperationException">
+            An attempt was made to add a host with a missing IP and/or ethernet
+            address - or - an attempt was made to delete a host without providing
+            and IP address.
+            </exception>
+      <exception cref="T:System.IO.FileNotFoundException">
+            The arp executable could not be found.
+            </exception>
+    </member>
+    <member name="M:CyrusBuilt.CyNetTools.Core.Arp.ArpModule.ProcessReader">
+      <summary>
+            Monitors the process and reads it's output. This method should only
+            execute in the reader thread.
+            </summary>
+    </member>
+    <member name="M:CyrusBuilt.CyNetTools.Core.Arp.ArpModule.Start">
+      <summary>
+            Launches the arp process on a separate thread.
+            </summary>
+      <exception cref="T:System.IO.FileNotFoundException">
+            The arp executable could not be found.
+            </exception>
+    </member>
+    <member name="P:CyrusBuilt.CyNetTools.Core.Arp.ArpModule.Verbose">
+      <summary>
+            Gets or sets a flag indicating whether or not to display current ARP
+            entries in verbose mode. All valid entries (including those on the
+            loopback interface) will be shown. Default is false.
+            </summary>
+    </member>
+    <member name="T:CyrusBuilt.CyNetTools.Core.Arp.ArpUtils">
+      <summary>
+            ARP utility methods.
+            </summary>
+    </member>
+    <member name="M:CyrusBuilt.CyNetTools.Core.Arp.ArpUtils.GetArpCommandString(CyrusBuilt.CyNetTools.Core.Arp.ArpCommand)">
+      <summary>
+            Gets the command argument string associated with the specified ARP
+            command.
+            </summary>
+      <param name="command">
+            The ARP command to get the command string for.
+            </param>
+      <returns>
+            The command string.
+            </returns>
+    </member>
+    <member name="T:CyrusBuilt.CyNetTools.Core.IPConfig.IpConfigCommand">
+      <summary>
+            Defines command options for ipconfig.
+            </summary>
+    </member>
+    <member name="F:CyrusBuilt.CyNetTools.Core.IPConfig.IpConfigCommand.ShowBasic">
+      <summary>
+            Show only the basic IP configuration info.
+            </summary>
+    </member>
+    <member name="F:CyrusBuilt.CyNetTools.Core.IPConfig.IpConfigCommand.ShowAll">
+      <summary>
+            Show detailed IP configuration info.
+            </summary>
+    </member>
+    <member name="F:CyrusBuilt.CyNetTools.Core.IPConfig.IpConfigCommand.Release">
+      <summary>
+            Release the IP address for the specified adapter or default if none specified.
+            </summary>
+    </member>
+    <member name="F:CyrusBuilt.CyNetTools.Core.IPConfig.IpConfigCommand.Renew">
+      <summary>
+            Renews the IP address for the specified adapter or default if none specified.
+            </summary>
+    </member>
+    <member name="F:CyrusBuilt.CyNetTools.Core.IPConfig.IpConfigCommand.FlushDNS">
+      <summary>
+            Purge the DNS resolver cache.
+            </summary>
+    </member>
+    <member name="F:CyrusBuilt.CyNetTools.Core.IPConfig.IpConfigCommand.RegisterDNS">
+      <summary>
+            Refreshes all DHCP leases and re-registers DNS names.
+            </summary>
+    </member>
+    <member name="F:CyrusBuilt.CyNetTools.Core.IPConfig.IpConfigCommand.DisplayDNS">
+      <summary>
+            Display the contents of the DNS resolver cache.
+            </summary>
+    </member>
+    <member name="F:CyrusBuilt.CyNetTools.Core.IPConfig.IpConfigCommand.ShowClassID">
+      <summary>
+            Displays all the DHCP class IDs for adapter or default if none specified.
+            </summary>
+    </member>
+    <member name="F:CyrusBuilt.CyNetTools.Core.IPConfig.IpConfigCommand.SetClassID">
+      <summary>
+            Modify the DHCP class ID.
+            </summary>
+    </member>
+    <member name="T:CyrusBuilt.CyNetTools.Core.IPConfig.IPConfigModule">
+      <summary>
+            Provides a threaded wrapper for the Microsoft IPConfig utility.
+            </summary>
+    </member>
+    <member name="M:CyrusBuilt.CyNetTools.Core.IPConfig.IPConfigModule.#ctor">
+      <summary>
+            Initializes a new instance of the <b>CyrusBuilt.CyNetTools.Core.IPConfig.IPConfigModule</b>
+            class. This is the default constructor.
+            </summary>
+    </member>
+    <member name="P:CyrusBuilt.CyNetTools.Core.IPConfig.IPConfigModule.AdapterName">
+      <summary>
+            Gets or sets the adapter name. This can be used when releasing or
+            renewing specific adapters or showing/setting adapter class IDs.
+            </summary>
+    </member>
+    <member name="M:CyrusBuilt.CyNetTools.Core.IPConfig.IPConfigModule.Cancel">
+      <summary>
+            Cancels the current ipconfig if it is running. This will attempt to
+            gracefully terminate the process first, and then force-kill the
+            process if graceful termination fails.
+            </summary>
+      <exception cref="T:System.ComponentModel.Win32Exception">
+            Unable to terminate process.
+            </exception>
+    </member>
+    <member name="P:CyrusBuilt.CyNetTools.Core.IPConfig.IPConfigModule.ClassID">
+      <summary>
+            Gets or sets the adapter class ID to use when modifying/setting
+            the class ID of a specific adapter.
+            </summary>
+    </member>
+    <member name="P:CyrusBuilt.CyNetTools.Core.IPConfig.IPConfigModule.Command">
+      <summary>
+            Gets or sets the ipconfig command to execute.
+            </summary>
+    </member>
+    <member name="M:CyrusBuilt.CyNetTools.Core.IPConfig.IPConfigModule.Dispose">
+      <summary>
+            Releases all resources used by this component.
+            </summary>
+    </member>
+    <member name="M:CyrusBuilt.CyNetTools.Core.IPConfig.IPConfigModule.Dispose(System.Boolean)">
+      <summary>
+            Releases all resources used by this component.
+            </summary>
+      <param name="disposing">
+            Set true if disposing all managed resources.
+            </param>
+    </member>
+    <member name="M:CyrusBuilt.CyNetTools.Core.IPConfig.IPConfigModule.Finalize">
+      <summary>
+            Destructor.
+            </summary>
+    </member>
+    <member name="P:CyrusBuilt.CyNetTools.Core.IPConfig.IPConfigModule.IPProtocolVersion">
+      <summary>
+            Gets or sets the IP protocol version to use (default is <see cref="F:CyrusBuilt.CyNetTools.Core.IPVersion.IPv4" />).
+            </summary>
+    </member>
+    <member name="M:CyrusBuilt.CyNetTools.Core.IPConfig.IPConfigModule.Preflight">
+      <summary>
+            Performs any neccessary preflight work prior to ping execution.
+            This method is intended to validate parameters and input and throw
+            the appropriate exception if any invalid parameter values are
+            detected or if the instance instance is in an invalid state.
+            </summary>
+      <exception cref="T:System.IO.FileNotFoundException">
+            The ipconfig executable could not be found.
+            </exception>
+    </member>
+    <member name="M:CyrusBuilt.CyNetTools.Core.IPConfig.IPConfigModule.ProcessReader">
+      <summary>
+            Monitors the process and reads it's output. This method should only
+            execute in the reader thread.
+            </summary>
+    </member>
+    <member name="P:CyrusBuilt.CyNetTools.Core.IPConfig.IPConfigModule.ShowAllCompartments">
+      <summary>
+            Gets or sets a flag indicating whether or not to show information
+            about all compartments.
+            </summary>
+    </member>
+    <member name="M:CyrusBuilt.CyNetTools.Core.IPConfig.IPConfigModule.Start">
+      <summary>
+            Launches the ipconfig process on a separate thread.
+            </summary>
+      <exception cref="T:System.IO.FileNotFoundException">
+            The ipconfig executable could not be found.
+            </exception>
+    </member>
+    <member name="T:CyrusBuilt.CyNetTools.Core.IPConfig.IpConfigUtils">
+      <summary>
+            IP Config utility methods.
+            </summary>
+    </member>
+    <member name="M:CyrusBuilt.CyNetTools.Core.IPConfig.IpConfigUtils.GetCommandString(CyrusBuilt.CyNetTools.Core.IPConfig.IpConfigCommand)">
+      <summary>
+            Gets command (argument) string associated with the specified command.
+            This overload assumes the IP protocol to use is IPv4.
+            </summary>
+      <param name="command">
+            The command to get the related argument string for.
+            </param>
+      <returns>
+            The argument string associated with the specified command.
+            </returns>
+    </member>
+    <member name="M:CyrusBuilt.CyNetTools.Core.IPConfig.IpConfigUtils.GetCommandString(CyrusBuilt.CyNetTools.Core.IPConfig.IpConfigCommand,CyrusBuilt.CyNetTools.Core.IPVersion)">
+      <summary>
+            Gets command (argument) string associated with the specified command.
+            </summary>
+      <param name="command">
+            The command to get the related argument string for.
+            </param>
+      <param name="version">
+            The IP protocol version to use, which affects the command version.
+            </param>
+      <returns>
+            The argument string associated with the specified command.
+            </returns>
+    </member>
+    <member name="T:CyrusBuilt.CyNetTools.Core.Net.NetToolBase">
+      <summary>
+            Base class for all tools that wrap Microsoft's Net utility (net.exe),
+            which provides the 'net' command (ie. net view, net use, etc).
+            </summary>
+    </member>
+    <member name="M:CyrusBuilt.CyNetTools.Core.Net.NetToolBase.#ctor">
+      <summary>
+            Initializes a new instance of the <b>CyrusBuilt.CyNetTools.Core.Net.NetToolBase</b>
+            class. This is the default constructor.
+            </summary>
+    </member>
+    <member name="P:CyrusBuilt.CyNetTools.Core.Net.NetToolBase.NetExec">
+      <summary>
+            Gets the net executable file.
+            </summary>
+    </member>
+    <member name="T:CyrusBuilt.CyNetTools.Core.Net.NetViewModule">
+      <summary>
+            Provides a threaded wrapper for the Microsoft Net utility using the
+            'View' command.
+            </summary>
+    </member>
+    <member name="M:CyrusBuilt.CyNetTools.Core.Net.NetViewModule.#ctor">
+      <summary>
+            Initializes a new instance of the <b>CyrusBuilt.CyNetTools.Core.Net.NetViewModule</b>
+            class. This is the default constructor.
+            </summary>
+    </member>
+    <member name="M:CyrusBuilt.CyNetTools.Core.Net.NetViewModule.Cancel">
+      <summary>
+            Cancels the current net view if it is running. This will attempt to
+            gracefully terminate the process first, and then force-kill the
+            process if graceful termination fails.
+            </summary>
+      <exception cref="T:System.ComponentModel.Win32Exception">
+            Unable to terminate process.
+            </exception>
+    </member>
+    <member name="P:CyrusBuilt.CyNetTools.Core.Net.NetViewModule.ComputerName">
+      <summary>
+            Gets or sets the name of the computer that contains the shared
+            resources that you want to view.
+            </summary>
+    </member>
+    <member name="M:CyrusBuilt.CyNetTools.Core.Net.NetViewModule.Dispose">
+      <summary>
+            Releases all resources used by this component.
+            </summary>
+    </member>
+    <member name="M:CyrusBuilt.CyNetTools.Core.Net.NetViewModule.Dispose(System.Boolean)">
+      <summary>
+            Releases all resources used by this component.
+            </summary>
+      <param name="disposing">
+            Set true if disposing all managed resources.
+            </param>
+    </member>
+    <member name="P:CyrusBuilt.CyNetTools.Core.Net.NetViewModule.DomainName">
+      <summary>
+            Gets or sets the domain to view the available computers for. Ignored
+            if <see cref="P:CyrusBuilt.CyNetTools.Core.Net.NetViewModule.ShowDomain" /> is false.
+            </summary>
+    </member>
+    <member name="M:CyrusBuilt.CyNetTools.Core.Net.NetViewModule.Finalize">
+      <summary>
+            Destructor.
+            </summary>
+    </member>
+    <member name="M:CyrusBuilt.CyNetTools.Core.Net.NetViewModule.Preflight">
+      <summary>
+            Performs any neccessary preflight work prior to net execution.
+            This method is intended to validate parameters and input and throw
+            the appropriate exception if any invalid parameter values are
+            detected or if the instance instance is in an invalid state.
+            </summary>
+      <exception cref="T:System.IO.FileNotFoundException">
+            The net executable could not be found.
+            </exception>
+    </member>
+    <member name="M:CyrusBuilt.CyNetTools.Core.Net.NetViewModule.ProcessReader">
+      <summary>
+            Monitors the process and reads it's output. This method should only
+            execute in the reader thread.
+            </summary>
+    </member>
+    <member name="P:CyrusBuilt.CyNetTools.Core.Net.NetViewModule.ShowAllShares">
+      <summary>
+            Gets or sets whether or not to display all shares including
+            administrative shares. Default is false.
+            </summary>
+    </member>
+    <member name="P:CyrusBuilt.CyNetTools.Core.Net.NetViewModule.ShowDomain">
+      <summary>
+            Gets or sets whether or not show all domains on the network or if
+            <see cref="P:CyrusBuilt.CyNetTools.Core.Net.NetViewModule.DomainName" /> is specified, then all computers on the
+            specified domain. Default is false.
+            </summary>
+    </member>
+    <member name="P:CyrusBuilt.CyNetTools.Core.Net.NetViewModule.ShowOfflineCacheSettings">
+      <summary>
+            Gets or sets whether or not to display the offline client caching
+            settings for the resources on the specified computer. Default is false.
+            </summary>
+    </member>
+    <member name="M:CyrusBuilt.CyNetTools.Core.Net.NetViewModule.Start">
+      <summary>
+            Launches the net process on a separate thread.
+            </summary>
+      <exception cref="T:System.IO.FileNotFoundException">
+            The net executable could not be found.
+            </exception>
+    </member>
+    <member name="T:CyrusBuilt.CyNetTools.Core.Netstat.ConnectionProtocol">
+      <summary>
+            Defines the protocols to show connections for.
+            </summary>
+    </member>
+    <member name="F:CyrusBuilt.CyNetTools.Core.Netstat.ConnectionProtocol.None">
+      <summary>
+            Will not show connections for a given protocol (disable).
+            </summary>
+    </member>
+    <member name="F:CyrusBuilt.CyNetTools.Core.Netstat.ConnectionProtocol.TCP">
+      <summary>
+            Shows TCP (Transmission Control Protocol v4) connections.
+            </summary>
+    </member>
+    <member name="F:CyrusBuilt.CyNetTools.Core.Netstat.ConnectionProtocol.UDP">
+      <summary>
+            Shows UDP (User Datagram Protocol v4) connections.
+            </summary>
+    </member>
+    <member name="F:CyrusBuilt.CyNetTools.Core.Netstat.ConnectionProtocol.TCPv6">
+      <summary>
+            Shows TCPv6 (Transmission Control Protocol v6) connections.
+            </summary>
+    </member>
+    <member name="F:CyrusBuilt.CyNetTools.Core.Netstat.ConnectionProtocol.UDPv6">
+      <summary>
+            Shows UDPv6 (User Datagram Protocol v6) connections.
+            </summary>
+    </member>
+    <member name="T:CyrusBuilt.CyNetTools.Core.Netstat.NetstatModule">
+      <summary>
+            A threaded wrapper for the Microsoft netstat utility.
+            </summary>
+    </member>
+    <member name="M:CyrusBuilt.CyNetTools.Core.Netstat.NetstatModule.#ctor">
+      <summary>
+            Initializes a new instance of the <b>CyrusBuilt.CyNetTools.Core.Netstat.NetstatModule</b>
+            class. This is the default constructor.
+            </summary>
+    </member>
+    <member name="M:CyrusBuilt.CyNetTools.Core.Netstat.NetstatModule.Cancel">
+      <summary>
+            Cancels the current netstat if it is running. This will attempt to
+            gracefully terminate the process first, and then force-kill the
+            process if graceful termination fails.
+            </summary>
+      <exception cref="T:System.ComponentModel.Win32Exception">
+            Unable to terminate process.
+            </exception>
+    </member>
+    <member name="M:CyrusBuilt.CyNetTools.Core.Netstat.NetstatModule.Dispose">
+      <summary>
+            Releases all resources used by this component.
+            </summary>
+    </member>
+    <member name="M:CyrusBuilt.CyNetTools.Core.Netstat.NetstatModule.Dispose(System.Boolean)">
+      <summary>
+            Releases all resources used by this component.
+            </summary>
+      <param name="disposing">
+            Set true if disposing all managed resources.
+            </param>
+    </member>
+    <member name="M:CyrusBuilt.CyNetTools.Core.Netstat.NetstatModule.Finalize">
+      <summary>
+            Destructor.
+            </summary>
+    </member>
+    <member name="P:CyrusBuilt.CyNetTools.Core.Netstat.NetstatModule.IntervalSeconds">
+      <summary>
+            Gets or sets the pause interval (in seconds) for refreshing
+            statistics data. Default is zero (disabled).
+            </summary>
+    </member>
+    <member name="M:CyrusBuilt.CyNetTools.Core.Netstat.NetstatModule.Preflight">
+      <summary>
+            Performs any neccessary preflight work prior to netstat execution.
+            This method is intended to validate parameters and input and throw
+            the appropriate exception if any invalid parameter values are
+            detected or if the instance instance is in an invalid state.
+            </summary>
+      <exception cref="T:System.IO.FileNotFoundException">
+            The netstat executable could not be found.
+            </exception>
+    </member>
+    <member name="M:CyrusBuilt.CyNetTools.Core.Netstat.NetstatModule.ProcessReader">
+      <summary>
+            Monitors the process and reads it's output. This method should only
+            execute in the reader thread.
+            </summary>
+    </member>
+    <member name="P:CyrusBuilt.CyNetTools.Core.Netstat.NetstatModule.ShowAll">
+      <summary>
+            Gets or sets whether or not to display all connections and
+            listening ports. Default is false.
+            </summary>
+    </member>
+    <member name="P:CyrusBuilt.CyNetTools.Core.Netstat.NetstatModule.ShowConnectionsForProtocol">
+      <summary>
+            Gets or sets whether or not to show connections for the
+            specified protocol. Default is <see cref="F:CyrusBuilt.CyNetTools.Core.Netstat.ConnectionProtocol.None" />
+            (disabled).
+            </summary>
+    </member>
+    <member name="P:CyrusBuilt.CyNetTools.Core.Netstat.NetstatModule.ShowEthernetStats">
+      <summary>
+            Gets or sets whether or not to display ethernet statistics. Default
+            is false.
+            </summary>
+    </member>
+    <member name="P:CyrusBuilt.CyNetTools.Core.Netstat.NetstatModule.ShowExecutable">
+      <summary>
+            Gets or sets whether or not to display the executable involved in
+            creating each connection or listening port. Default is false.
+            </summary>
+    </member>
+    <member name="P:CyrusBuilt.CyNetTools.Core.Netstat.NetstatModule.ShowFQDN">
+      <summary>
+            Gets or sets whether or not to show the Fully Qualified Domain Names
+            (FQDN) for foreign addresses. Default is false.
+            </summary>
+    </member>
+    <member name="P:CyrusBuilt.CyNetTools.Core.Netstat.NetstatModule.ShowNumeric">
+      <summary>
+            Gets or sets whether or not to display addresses and port numbers
+            in numeric form. Default is false.
+            </summary>
+    </member>
+    <member name="P:CyrusBuilt.CyNetTools.Core.Netstat.NetstatModule.ShowOffload">
+      <summary>
+            Gets or sets whether or not to show the current connection offload
+            state. Default is false.
+            </summary>
+    </member>
+    <member name="P:CyrusBuilt.CyNetTools.Core.Netstat.NetstatModule.ShowOwner">
+      <summary>
+            Gets or sets whether or not to display the owning process ID
+            associated with each connection. Default is false.
+            </summary>
+    </member>
+    <member name="P:CyrusBuilt.CyNetTools.Core.Netstat.NetstatModule.ShowRoutingTable">
+      <summary>
+            Gets or sets whether not to display the routing table. Default is
+            false.
+            </summary>
+    </member>
+    <member name="P:CyrusBuilt.CyNetTools.Core.Netstat.NetstatModule.ShowStatsForProtocol">
+      <summary>
+            Gets or sets the protocol to display per-protocol statistics for.
+            Default is <see cref="F:CyrusBuilt.CyNetTools.Core.Netstat.StatsProtocol.None" />.
+            </summary>
+    </member>
+    <member name="M:CyrusBuilt.CyNetTools.Core.Netstat.NetstatModule.Start">
+      <summary>
+            Launches the netstat process on a separate thread.
+            </summary>
+      <exception cref="T:System.IO.FileNotFoundException">
+            The netstat executable could not be found.
+            </exception>
+    </member>
+    <member name="T:CyrusBuilt.CyNetTools.Core.Netstat.NetstatUtils">
+      <summary>
+            Netstat utility methods.
+            </summary>
+    </member>
+    <member name="M:CyrusBuilt.CyNetTools.Core.Netstat.NetstatUtils.GetConnectionProtocolName(CyrusBuilt.CyNetTools.Core.Netstat.ConnectionProtocol)">
+      <summary>
+            Gets the name of the specified connection protocol.
+            </summary>
+      <param name="protocol">
+            The protocol to get the name of.
+            </param>
+      <returns>
+            The name of the specified protocol.
+            </returns>
+    </member>
+    <member name="M:CyrusBuilt.CyNetTools.Core.Netstat.NetstatUtils.GetStatsProtocolName(CyrusBuilt.CyNetTools.Core.Netstat.StatsProtocol)">
+      <summary>
+            Gets the name of the specified stats protocol.
+            </summary>
+      <param name="protocol">
+            The protocol to get the name of.
+            </param>
+      <returns>
+            The name of the specified protocol.
+            </returns>
+    </member>
+    <member name="T:CyrusBuilt.CyNetTools.Core.Netstat.StatsProtocol">
+      <summary>
+            Defines the protocols to show statistics for.
+            </summary>
+    </member>
+    <member name="F:CyrusBuilt.CyNetTools.Core.Netstat.StatsProtocol.None">
+      <summary>
+            Will not show statistics for a specific protocol (disable).
+            </summary>
+    </member>
+    <member name="F:CyrusBuilt.CyNetTools.Core.Netstat.StatsProtocol.IP">
+      <summary>
+            Shows statistics for the IP (Internet Protocol v4) protocol.
+            </summary>
+    </member>
+    <member name="F:CyrusBuilt.CyNetTools.Core.Netstat.StatsProtocol.IPv6">
+      <summary>
+            Shows statistics for the IPv6 (Internet Protocol v6) protocol.
+            </summary>
+    </member>
+    <member name="F:CyrusBuilt.CyNetTools.Core.Netstat.StatsProtocol.ICMP">
+      <summary>
+            Shows statistics for the ICMP (Internet Control Message Protocol v4) protocol.
+            </summary>
+    </member>
+    <member name="F:CyrusBuilt.CyNetTools.Core.Netstat.StatsProtocol.ICMPv6">
+      <summary>
+            Shows statistics for the ICMPv6 (Internet Control Message Protocol v6) protocol.
+            </summary>
+    </member>
+    <member name="F:CyrusBuilt.CyNetTools.Core.Netstat.StatsProtocol.TCP">
+      <summary>
+            Shows statistics for the TCP (Transmission Control Protocol v4) protocol.
+            </summary>
+    </member>
+    <member name="F:CyrusBuilt.CyNetTools.Core.Netstat.StatsProtocol.TCPv6">
+      <summary>
+            Shows statistics for the TCPv6 (Transmission Control Protocol v6) protocol.
+            </summary>
+    </member>
+    <member name="F:CyrusBuilt.CyNetTools.Core.Netstat.StatsProtocol.UDP">
+      <summary>
+            Shows statistics for the UDP (User Datagram Protocol v4) protocol.
+            </summary>
+    </member>
+    <member name="F:CyrusBuilt.CyNetTools.Core.Netstat.StatsProtocol.UDPv6">
+      <summary>
+            Shows statistics for the UDPv6 (User Datagram Protocol v6) protocol.
+            </summary>
+    </member>
+    <member name="T:CyrusBuilt.CyNetTools.Core.Ping.PingErrorCodes">
+      <summary>
+            Ping process error codes.
+            </summary>
+    </member>
+    <member name="F:CyrusBuilt.CyNetTools.Core.Ping.PingErrorCodes.NoError">
+      <summary>
+            No error. Normal exit.
+            </summary>
+    </member>
+    <member name="F:CyrusBuilt.CyNetTools.Core.Ping.PingErrorCodes.BufferTooSmall">
+      <summary>
+            Send buffer too small.
+            </summary>
+    </member>
+    <member name="F:CyrusBuilt.CyNetTools.Core.Ping.PingErrorCodes.DestinationNetUnreachable">
+      <summary>
+            Destination network not reachable.
+            </summary>
+    </member>
+    <member name="F:CyrusBuilt.CyNetTools.Core.Ping.PingErrorCodes.DestinationHostUnreachable">
+      <summary>
+            Destination host not reachable.
+            </summary>
+    </member>
+    <member name="F:CyrusBuilt.CyNetTools.Core.Ping.PingErrorCodes.DestinationProtocolUnreachable">
+      <summary>
+            Destination protocol not reachable.
+            </summary>
+    </member>
+    <member name="F:CyrusBuilt.CyNetTools.Core.Ping.PingErrorCodes.DestinationPortUnreachable">
+      <summary>
+            Destination port not reachable.
+            </summary>
+    </member>
+    <member name="F:CyrusBuilt.CyNetTools.Core.Ping.PingErrorCodes.NoResources">
+      <summary>
+            Lack of resources to perform action.
+            </summary>
+    </member>
+    <member name="F:CyrusBuilt.CyNetTools.Core.Ping.PingErrorCodes.BadOption">
+      <summary>
+            Invalid option or combination of options specified.
+            </summary>
+    </member>
+    <member name="F:CyrusBuilt.CyNetTools.Core.Ping.PingErrorCodes.HarwareError">
+      <summary>
+            A network interface hardware error occurred.
+            </summary>
+    </member>
+    <member name="F:CyrusBuilt.CyNetTools.Core.Ping.PingErrorCodes.PacketTooBig">
+      <summary>
+            Packet size too large.
+            </summary>
+    </member>
+    <member name="F:CyrusBuilt.CyNetTools.Core.Ping.PingErrorCodes.RequestTimeout">
+      <summary>
+            The request timed out.
+            </summary>
+    </member>
+    <member name="F:CyrusBuilt.CyNetTools.Core.Ping.PingErrorCodes.BadRequest">
+      <summary>
+            Bad request.
+            </summary>
+    </member>
+    <member name="F:CyrusBuilt.CyNetTools.Core.Ping.PingErrorCodes.BadRoute">
+      <summary>
+            Bad route.
+            </summary>
+    </member>
+    <member name="F:CyrusBuilt.CyNetTools.Core.Ping.PingErrorCodes.TTLExpiredTransit">
+      <summary>
+            Time-to-live expired in transit.
+            </summary>
+    </member>
+    <member name="F:CyrusBuilt.CyNetTools.Core.Ping.PingErrorCodes.TTLExpiredReassembly">
+      <summary>
+            Time-to-live expired during packet reassembly.
+            </summary>
+    </member>
+    <member name="F:CyrusBuilt.CyNetTools.Core.Ping.PingErrorCodes.BadParameter">
+      <summary>
+            Bad parameter.
+            </summary>
+    </member>
+    <member name="F:CyrusBuilt.CyNetTools.Core.Ping.PingErrorCodes.SourceQuench">
+      <summary>
+            Source quenched.
+            </summary>
+    </member>
+    <member name="F:CyrusBuilt.CyNetTools.Core.Ping.PingErrorCodes.OptionTooBig">
+      <summary>
+            Option too big.
+            </summary>
+    </member>
+    <member name="F:CyrusBuilt.CyNetTools.Core.Ping.PingErrorCodes.BadDestination">
+      <summary>
+            Bad Destination.
+            </summary>
+    </member>
+    <member name="F:CyrusBuilt.CyNetTools.Core.Ping.PingErrorCodes.NegotiateIPSEC">
+      <summary>
+            Failed to negotiate IPSEC with target.
+            </summary>
+    </member>
+    <member name="F:CyrusBuilt.CyNetTools.Core.Ping.PingErrorCodes.GeneralFailure">
+      <summary>
+            A general failure occurred.
+            </summary>
+    </member>
+    <member name="T:CyrusBuilt.CyNetTools.Core.Ping.PingModule">
+      <summary>
+            Provides a threaded wrapper for the Microsoft Ping utility.
+            </summary>
+    </member>
+    <member name="M:CyrusBuilt.CyNetTools.Core.Ping.PingModule.#ctor">
+      <summary>
+            Initializes a new instance of the <b>CyrusBuilt.CyNetTools.Core.Ping.PingModule</b>
+            class. This is the default constructor.
+            </summary>
+    </member>
+    <member name="P:CyrusBuilt.CyNetTools.Core.Ping.PingModule.BufferSize">
+      <summary>
+            Gets or sets the send buffer size. Cannot be greater than <see cref="F:CyrusBuilt.CyNetTools.Core.Ping.PingModule.MAX_BUFFER_SIZE" />.
+            Setting this value to less than or equal zero will result in the
+            internal default size being used. Default is zero.
+            </summary>
+      <exception cref="T:System.ArgumentException">
+            Buffer size cannot be greater than <see cref="F:CyrusBuilt.CyNetTools.Core.Ping.PingModule.MAX_BUFFER_SIZE" />.
+            </exception>
+    </member>
+    <member name="M:CyrusBuilt.CyNetTools.Core.Ping.PingModule.Cancel">
+      <summary>
+            Cancels the current ping if it is running. This will attempt to
+            gracefully terminate the process first, and then force-kill the
+            process if graceful termination fails.
+            </summary>
+      <exception cref="T:System.ComponentModel.Win32Exception">
+            Unable to terminate process.
+            </exception>
+    </member>
+    <member name="P:CyrusBuilt.CyNetTools.Core.Ping.PingModule.ContinuousPing">
+      <summary>
+            Gets or sets whether or not to ping continuously until <see cref="M:CyrusBuilt.CyNetTools.Core.Ping.PingModule.Cancel" />
+            is called. Default is false. If enabled, progress will always be
+            reported as 100%.
+            </summary>
+    </member>
+    <member name="F:CyrusBuilt.CyNetTools.Core.Ping.PingModule.DEFAULT_REQ_COUNT">
+      <summary>
+            The default echo request count (4).
+            </summary>
+    </member>
+    <member name="M:CyrusBuilt.CyNetTools.Core.Ping.PingModule.Dispose">
+      <summary>
+            Releases all resources used by this component.
+            </summary>
+    </member>
+    <member name="M:CyrusBuilt.CyNetTools.Core.Ping.PingModule.Dispose(System.Boolean)">
+      <summary>
+            Releases all resources used by this component.
+            </summary>
+      <param name="disposing">
+            Set true if disposing all managed resources.
+            </param>
+    </member>
+    <member name="P:CyrusBuilt.CyNetTools.Core.Ping.PingModule.DoNotFragment">
+      <summary>
+            Gets or sets whether or not to set the fragment the no fragmentation
+            flag in the packet (IPv4 only). Default is false.
+            </summary>
+    </member>
+    <member name="P:CyrusBuilt.CyNetTools.Core.Ping.PingModule.ExitStatus">
+      <summary>
+            Gets a <see cref="T:CyrusBuilt.CyNetTools.Core.Ping.PingErrorCodes" /> enum member corresponding to
+            the process exit code returned by <see cref="P:CyrusBuilt.CyNetTools.Core.ExternalToolBase.ExitCode" />.
+            This value will always be <see cref="F:CyrusBuilt.CyNetTools.Core.Ping.PingErrorCodes.NoError" />
+            until the process is terminated.
+            </summary>
+    </member>
+    <member name="M:CyrusBuilt.CyNetTools.Core.Ping.PingModule.Finalize">
+      <summary>
+            Destructor.
+            </summary>
+    </member>
+    <member name="P:CyrusBuilt.CyNetTools.Core.Ping.PingModule.IPProtocolVersion">
+      <summary>
+            Gets or sets the IP protocol version to use (default is <see cref="F:CyrusBuilt.CyNetTools.Core.IPVersion.IPv4" />).
+            </summary>
+    </member>
+    <member name="F:CyrusBuilt.CyNetTools.Core.Ping.PingModule.MAX_BUFFER_SIZE">
+      <summary>
+            The maximum send buffer size (65527 bytes).
+            </summary>
+    </member>
+    <member name="F:CyrusBuilt.CyNetTools.Core.Ping.PingModule.MAX_ROUTE_HOPS">
+      <summary>
+            The maximum number of hops to record route for (9).
+            </summary>
+    </member>
+    <member name="F:CyrusBuilt.CyNetTools.Core.Ping.PingModule.MAX_SRCLIST_HOSTS">
+      <summary>
+            The maximum number of hosts to source list from (9).
+            </summary>
+    </member>
+    <member name="F:CyrusBuilt.CyNetTools.Core.Ping.PingModule.MAX_TIMESTAMP_HOPS">
+      <summary>
+            The maximum number of hops to record timestamp for (4).
+            </summary>
+    </member>
+    <member name="M:CyrusBuilt.CyNetTools.Core.Ping.PingModule.OnProgress(CyrusBuilt.CyNetTools.Core.Ping.PingProgressEventArgs)">
+      <summary>
+            Raises the <see cref="E:CyrusBuilt.CyNetTools.Core.Ping.PingModule.Progress" /> event.
+            </summary>
+      <param name="e">
+            The event arguments.
+            </param>
+    </member>
+    <member name="M:CyrusBuilt.CyNetTools.Core.Ping.PingModule.Preflight">
+      <summary>
+            Performs any neccessary preflight work prior to ping execution.
+            This method is intended to validate parameters and input and throw
+            the appropriate exception if any invalid parameter values are
+            detected or if the instance instance is in an invalid state.
+            </summary>
+      <exception cref="T:System.InvalidOperationException">
+            Illegal delimiters in HostList - or - too many hosts in HostList
+            - or - No target specified.
+            </exception>
+      <exception cref="T:System.IO.FileNotFoundException">
+            The ping executable could not be found.
+            </exception>
+    </member>
+    <member name="M:CyrusBuilt.CyNetTools.Core.Ping.PingModule.ProcessReader">
+      <summary>
+            Monitors the process and reads it's output. This method should only
+            execute in the reader thread.
+            </summary>
+    </member>
+    <member name="E:CyrusBuilt.CyNetTools.Core.Ping.PingModule.Progress">
+      <summary>
+            Occurs when progress is made.
+            </summary>
+    </member>
+    <member name="P:CyrusBuilt.CyNetTools.Core.Ping.PingModule.RecordHopCount">
+      <summary>
+            Gets or sets the record hop count. Records the route for the specified
+            number of hops (IPv4 only). If set to less than or equal to zero,
+            then the internal default value will be used. Cannot be greater than
+            <see cref="F:CyrusBuilt.CyNetTools.Core.Ping.PingModule.MAX_ROUTE_HOPS" />. Default is zero.
+            </summary>
+      <exception cref="T:System.ArgumentException">
+            Value cannot be greater than <see cref="F:CyrusBuilt.CyNetTools.Core.Ping.PingModule.MAX_ROUTE_HOPS" />.
+            </exception>
+    </member>
+    <member name="P:CyrusBuilt.CyNetTools.Core.Ping.PingModule.RequestCount">
+      <summary>
+            Gets or sets the number of echo requests to send. Default is 4.
+            Setting this value to less than or equal to zero will result in
+            the default count value being used instead.
+            </summary>
+    </member>
+    <member name="P:CyrusBuilt.CyNetTools.Core.Ping.PingModule.ResolveHostNames">
+      <summary>
+            Gets or sets whether or not to resolve addresses to hostnames
+            (default is true).
+            </summary>
+    </member>
+    <member name="P:CyrusBuilt.CyNetTools.Core.Ping.PingModule.SourceAddress">
+      <summary>
+            Gets or sets the source address to use. This can be used to spoof
+            the sender address. If set null (default), then the IP address of
+            the default active network interface will be used.
+            </summary>
+    </member>
+    <member name="P:CyrusBuilt.CyNetTools.Core.Ping.PingModule.SourceRouteList">
+      <summary>
+            Gets or sets the host-list to use with <see cref="P:CyrusBuilt.CyNetTools.Core.Ping.PingModule.SourceRouteMode" />
+            (IPv4 only). Default is an empty string (disabled).
+            </summary>
+    </member>
+    <member name="P:CyrusBuilt.CyNetTools.Core.Ping.PingModule.SourceRouteMode">
+      <summary>
+            Gets or sets the source route mode. This is used with <see cref="P:CyrusBuilt.CyNetTools.Core.Ping.PingModule.SourceRouteList" />
+            to either use a strict or loose route along the specified host-list
+            (IPv4 only). Default is <see cref="F:CyrusBuilt.CyNetTools.Core.Ping.RouteMode.None" /> (disabled).
+            </summary>
+    </member>
+    <member name="M:CyrusBuilt.CyNetTools.Core.Ping.PingModule.Start">
+      <summary>
+            Launches the ping process on a separate thread.
+            </summary>
+      <exception cref="T:System.InvalidOperationException">
+            Illegal delimiters in HostList - or - too many hosts in HostList
+            - or - No target specified.
+            </exception>
+      <exception cref="T:System.IO.FileNotFoundException">
+            The ping executable could not be found.
+            </exception>
+    </member>
+    <member name="P:CyrusBuilt.CyNetTools.Core.Ping.PingModule.TargetHost">
+      <summary>
+            Gets or sets the target host to ping.
+            </summary>
+    </member>
+    <member name="P:CyrusBuilt.CyNetTools.Core.Ping.PingModule.TestReversRoute">
+      <summary>
+            Gets or sets whether or not to use the routing header to test the
+            reverse route also (IPv6) only. Default is false.
+            </summary>
+    </member>
+    <member name="P:CyrusBuilt.CyNetTools.Core.Ping.PingModule.Timeout">
+      <summary>
+            Gets or sets the timeout in milliseconds to wait for each reply. If
+            set to less than or equal to zero (default), then the internal
+            default value will be used instead.
+            </summary>
+    </member>
+    <member name="P:CyrusBuilt.CyNetTools.Core.Ping.PingModule.TimestampCount">
+      <summary>
+            Gets or sets the hop count to record the timestamp for (IPv4) only.
+            If this value is set to less than or equal to zero, then this option
+            will be disabled (default). Cannot be greater than <see cref="F:CyrusBuilt.CyNetTools.Core.Ping.PingModule.MAX_TIMESTAMP_HOPS" />.
+            </summary>
+      <exception cref="T:System.ArgumentException">
+            Value cannot be greater than <see cref="F:CyrusBuilt.CyNetTools.Core.Ping.PingModule.MAX_TIMESTAMP_HOPS" />.
+            </exception>
+    </member>
+    <member name="P:CyrusBuilt.CyNetTools.Core.Ping.PingModule.TimeToLive">
+      <summary>
+            Gets or sets the time-to-live in packet. If this value is set to
+            less than or equal to zero, then the internal default will be used
+            instead. Default is zero.
+            </summary>
+    </member>
+    <member name="T:CyrusBuilt.CyNetTools.Core.Ping.PingProgressEventArgs">
+      <summary>
+            Ping progress event arguments class.
+            </summary>
+    </member>
+    <member name="M:CyrusBuilt.CyNetTools.Core.Ping.PingProgressEventArgs.#ctor(System.Int32,System.Int32,System.Int32,System.Int32)">
+      <summary>
+            Initializes a new instance of the <b>CyrusBuilt.CyNetTools.Core.Ping.PingProgressEventArgs</b>
+            class with the count of completed pings, count of successful pings,
+            count of failed pings, and total number of pings.
+            </summary>
+      <param name="completed">
+            The count of pings completed.
+            </param>
+      <param name="succeeded">
+            The count of successful pings.
+            </param>
+      <param name="failed">
+            The count of failed pings.
+            </param>
+      <param name="total">
+            The total number of pings.
+            </param>
+    </member>
+    <member name="P:CyrusBuilt.CyNetTools.Core.Ping.PingProgressEventArgs.PacketLoss">
+      <summary>
+            Gets the percentage of packet loss.
+            </summary>
+    </member>
+    <member name="P:CyrusBuilt.CyNetTools.Core.Ping.PingProgressEventArgs.PercentComplete">
+      <summary>
+            Gets the percentage of completed requests.
+            </summary>
+    </member>
+    <member name="P:CyrusBuilt.CyNetTools.Core.Ping.PingProgressEventArgs.RequestsCompleted">
+      <summary>
+            Gets the number of ping requests completed.
+            </summary>
+    </member>
+    <member name="P:CyrusBuilt.CyNetTools.Core.Ping.PingProgressEventArgs.RequestsFailed">
+      <summary>
+            Gets the number of failed requests.
+            </summary>
+    </member>
+    <member name="P:CyrusBuilt.CyNetTools.Core.Ping.PingProgressEventArgs.RequestsSucceeded">
+      <summary>
+            Gets the number of successful ping requests.
+            </summary>
+    </member>
+    <member name="P:CyrusBuilt.CyNetTools.Core.Ping.PingProgressEventArgs.TotalRequests">
+      <summary>
+            Gets the total number of ping requests.
+            </summary>
+    </member>
+    <member name="T:CyrusBuilt.CyNetTools.Core.Ping.PingProgressEventHandler">
+      <summary>
+            Event handler delegate for ping progress events.
+            </summary>
+      <param name="sender">
+            The object that fired the event.
+            </param>
+      <param name="e">
+            The event arguments.
+            </param>
+    </member>
+    <member name="T:CyrusBuilt.CyNetTools.Core.Ping.PingUtils">
+      <summary>
+            Ping utility functions.
+            </summary>
+    </member>
+    <member name="M:CyrusBuilt.CyNetTools.Core.Ping.PingUtils.GetPingErrorMessage(CyrusBuilt.CyNetTools.Core.Ping.PingErrorCodes)">
+      <summary>
+            Gets the description of the specified ping error code.
+            </summary>
+      <param name="error">
+            The error to get the description of.
+            </param>
+      <returns>
+            The description of the specified error.
+            </returns>
+    </member>
+    <member name="T:CyrusBuilt.CyNetTools.Core.Ping.RouteMode">
+      <summary>
+            Routing modes (for host lists).
+            </summary>
+    </member>
+    <member name="F:CyrusBuilt.CyNetTools.Core.Ping.RouteMode.Loose">
+      <summary>
+            Loose source routing.
+            </summary>
+    </member>
+    <member name="F:CyrusBuilt.CyNetTools.Core.Ping.RouteMode.Strict">
+      <summary>
+            String source routing.
+            </summary>
+    </member>
+    <member name="F:CyrusBuilt.CyNetTools.Core.Ping.RouteMode.None">
+      <summary>
+            Do not use source routing.
+            </summary>
+    </member>
+    <member name="T:CyrusBuilt.CyNetTools.Core.TraceRoute.TraceProgressEventArgs">
+      <summary>
+            Trace route progress event arguments class.
+            </summary>
+    </member>
+    <member name="M:CyrusBuilt.CyNetTools.Core.TraceRoute.TraceProgressEventArgs.#ctor(System.Int32,System.Int32)">
+      <summary>
+            Initializes a new instance of the <b>CyrusBuilt.CyNetTools.Core.TraceRoute.TraceProgressEventArgs</b>
+            class with the current hop in progress and the total number of hops.
+            </summary>
+      <param name="currentHop">
+            The current hop in progress.
+            </param>
+      <param name="totalHops">
+            The total number of hops.
+            </param>
+    </member>
+    <member name="P:CyrusBuilt.CyNetTools.Core.TraceRoute.TraceProgressEventArgs.CurrentHop">
+      <summary>
+            Gets the current hop in progress.
+            </summary>
+    </member>
+    <member name="P:CyrusBuilt.CyNetTools.Core.TraceRoute.TraceProgressEventArgs.Progress">
+      <summary>
+            Gets the trace progress percentage.
+            </summary>
+    </member>
+    <member name="P:CyrusBuilt.CyNetTools.Core.TraceRoute.TraceProgressEventArgs.TotalHops">
+      <summary>
+            Gets the total number of hops.
+            </summary>
+    </member>
+    <member name="T:CyrusBuilt.CyNetTools.Core.TraceRoute.TraceProgressEventHandler">
+      <summary>
+            Handler delegate for trace progress events.
+            </summary>
+      <param name="sender">
+            A reference to the object that raised the event.
+            </param>
+      <param name="e">
+            The event arguments.
+            </param>
+    </member>
+    <member name="T:CyrusBuilt.CyNetTools.Core.TraceRoute.TraceRouteModule">
+      <summary>
+            A threaded wrapper for the Microsoft tracert utility.
+            </summary>
+    </member>
+    <member name="M:CyrusBuilt.CyNetTools.Core.TraceRoute.TraceRouteModule.#ctor">
+      <summary>
+            Initializes a new instance of the <b>CyrusBuilt.CyNetTools.Core.TraceRoute.TraceRouteModule</b>
+            class. This is the default constructor.
+            </summary>
+    </member>
+    <member name="M:CyrusBuilt.CyNetTools.Core.TraceRoute.TraceRouteModule.Cancel">
+      <summary>
+            Cancels the current tracert if it is running. This will attempt to
+            gracefully terminate the process first, and then force-kill the
+            process if graceful termination fails.
+            </summary>
+      <exception cref="T:System.ComponentModel.Win32Exception">
+            Unable to terminate process.
+            </exception>
+    </member>
+    <member name="F:CyrusBuilt.CyNetTools.Core.TraceRoute.TraceRouteModule.DEFAULT_HOP_COUNT">
+      <summary>
+            The default hop count (30).
+            </summary>
+    </member>
+    <member name="M:CyrusBuilt.CyNetTools.Core.TraceRoute.TraceRouteModule.Dispose">
+      <summary>
+            Releases all resources used by this component.
+            </summary>
+    </member>
+    <member name="M:CyrusBuilt.CyNetTools.Core.TraceRoute.TraceRouteModule.Dispose(System.Boolean)">
+      <summary>
+            Releases all resources used by this component.
+            </summary>
+      <param name="disposing">
+            Set true if disposing all managed resources.
+            </param>
+    </member>
+    <member name="P:CyrusBuilt.CyNetTools.Core.TraceRoute.TraceRouteModule.DoNotResolveNames">
+      <summary>
+            Gets whether or not to disable performing name resolution on the
+            target and each node in between. Default is false.
+            </summary>
+    </member>
+    <member name="M:CyrusBuilt.CyNetTools.Core.TraceRoute.TraceRouteModule.Finalize">
+      <summary>
+            Destructor.
+            </summary>
+    </member>
+    <member name="P:CyrusBuilt.CyNetTools.Core.TraceRoute.TraceRouteModule.HostList">
+      <summary>
+            Gets or sets the space-delimited list of hosts source the route along.
+            Default is an empty string (disabled). Ignored unless <see cref="P:CyrusBuilt.CyNetTools.Core.TraceRoute.TraceRouteModule.IPProtocolVersion" />
+            is <see cref="F:CyrusBuilt.CyNetTools.Core.IPVersion.IPv4" />.
+            </summary>
+    </member>
+    <member name="P:CyrusBuilt.CyNetTools.Core.TraceRoute.TraceRouteModule.IPProtocolVersion">
+      <summary>
+            Gets or sets the IP protocol version to use (default is <see cref="F:CyrusBuilt.CyNetTools.Core.IPVersion.IPv4" />).
+            </summary>
+    </member>
+    <member name="P:CyrusBuilt.CyNetTools.Core.TraceRoute.TraceRouteModule.MaxHops">
+      <summary>
+            Gets or sets the max number of hops to search for target. Default
+            is zero (ignore).
+            </summary>
+    </member>
+    <member name="M:CyrusBuilt.CyNetTools.Core.TraceRoute.TraceRouteModule.OnProgress(CyrusBuilt.CyNetTools.Core.TraceRoute.TraceProgressEventArgs)">
+      <summary>
+            Raises the <see cref="E:CyrusBuilt.CyNetTools.Core.TraceRoute.TraceRouteModule.Progress" /> event.
+            </summary>
+      <param name="e">
+            The event arguments.
+            </param>
+    </member>
+    <member name="M:CyrusBuilt.CyNetTools.Core.TraceRoute.TraceRouteModule.Preflight">
+      <summary>
+            Performs any neccessary preflight work prior to tracert execution.
+            This method is intended to validate parameters and input and throw
+            the appropriate exception if any invalid parameter values are
+            detected or if the instance instance is in an invalid state.
+            </summary>
+      <exception cref="T:System.InvalidOperationException">
+            Target host not specified.
+            </exception>
+      <exception cref="T:System.IO.FileNotFoundException">
+            The tracert executable could not be found.
+            </exception>
+    </member>
+    <member name="M:CyrusBuilt.CyNetTools.Core.TraceRoute.TraceRouteModule.ProcessReader">
+      <summary>
+            Monitors the process and reads it's output. This method should only
+            execute in the reader thread.
+            </summary>
+    </member>
+    <member name="E:CyrusBuilt.CyNetTools.Core.TraceRoute.TraceRouteModule.Progress">
+      <summary>
+            Occurs when trace progress is made.
+            </summary>
+    </member>
+    <member name="P:CyrusBuilt.CyNetTools.Core.TraceRoute.TraceRouteModule.RoundTrip">
+      <summary>
+            Gets or sets whether or not to trace round-trip path. Ignored unless
+            <see cref="P:CyrusBuilt.CyNetTools.Core.TraceRoute.TraceRouteModule.IPProtocolVersion" /> is <see cref="F:CyrusBuilt.CyNetTools.Core.IPVersion.IPv6" />.
+            Default is false;
+            </summary>
+    </member>
+    <member name="P:CyrusBuilt.CyNetTools.Core.TraceRoute.TraceRouteModule.SourceAddress">
+      <summary>
+            Gets or sets the source address to use. Default is <see cref="F:System.Net.IPAddress.None" />.
+            Ignored unless <see cref="P:CyrusBuilt.CyNetTools.Core.TraceRoute.TraceRouteModule.IPProtocolVersion" /> is <see cref="F:CyrusBuilt.CyNetTools.Core.IPVersion.IPv6" />.
+            </summary>
+    </member>
+    <member name="M:CyrusBuilt.CyNetTools.Core.TraceRoute.TraceRouteModule.Start">
+      <summary>
+            Launches the net process on a separate thread.
+            </summary>
+      <exception cref="T:System.InvalidOperationException">
+            Target host not specified.
+            </exception>
+      <exception cref="T:System.IO.FileNotFoundException">
+            The tracert executable could not be found.
+            </exception>
+    </member>
+    <member name="P:CyrusBuilt.CyNetTools.Core.TraceRoute.TraceRouteModule.TargetHost">
+      <summary>
+            Gets or sets the target hostname or IP address to trace.
+            </summary>
+    </member>
+    <member name="P:CyrusBuilt.CyNetTools.Core.TraceRoute.TraceRouteModule.Timeout">
+      <summary>
+            Gets or sets the timeout in milliseconds to wait for each reply.
+            Default is zero (ignore).
+            </summary>
+    </member>
+  </members>
+</doc>
