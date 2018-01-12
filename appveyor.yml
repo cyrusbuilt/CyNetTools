@@ -27,7 +27,7 @@ cache:
 #---------------------------------#
 
 build_script:
-    - cmd: make.cmd test
+    - cmd: make.cmd
 
 # Run the unit tests.
 test:
