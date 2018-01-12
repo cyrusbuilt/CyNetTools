@@ -36,6 +36,11 @@ test: off
 #           artifacts             #
 #---------------------------------#
 
+artifacts:
+  - path: TestResult.xml
+    name: testresults
+	
+
 #---------------------------------#
 #         notifications           #
 #---------------------------------#
