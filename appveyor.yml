@@ -42,8 +42,8 @@ test: off
 
 notifications:
     - provider: Email
-    to:
+	  to:
         - cyrusbuilt@gmail.com
-    on_build_success: false
-    on_build_failure: true
-    on_build_changed: false
+      on_build_success: false
+      on_build_failure: true
+      on_build_changed: false
