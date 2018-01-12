@@ -5,8 +5,10 @@ VisualStudioVersion = 14.0.25420.1
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{5D98F6C4-4556-4B2E-88BC-C2AEF5A5A049}"
 	ProjectSection(SolutionItems) = preProject
+		appveyor.yml = appveyor.yml
 		build.properties = build.properties
 		CyNetTools.build = CyNetTools.build
+		make.cmd = make.cmd
 	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CyNetTools", "CyNetTools\CyNetTools.csproj", "{09ADD979-C2DB-4BBB-BA72-28E96BA09788}"
@@ -24,6 +26,10 @@ Project("{7CF6DF6D-3B04-46F8-A40B-537D21BCA0B4}") = "CyrusBuilt.CyNetTools.Plugi
 	ProjectSection(ProjectDependencies) = postProject
 		{FBECE950-D09B-4658-B289-5443C063C7F9} = {FBECE950-D09B-4658-B289-5443C063C7F9}
 	EndProjectSection
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CyrusBuilt.CyNetTools.Core.Tests", "CyrusBuilt.CyNetTools.Core.Tests\CyrusBuilt.CyNetTools.Core.Tests.csproj", "{580A5710-37C4-4C17-8C1B-82F36E0F17AA}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CyrusBuilt.CyNetTools.Plugins.Tests", "CyrusBuilt.CyNetTools.Plugins.Tests\CyrusBuilt.CyNetTools.Plugins.Tests.csproj", "{3140C81D-E2DA-40C3-921C-B917B6125820}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -83,6 +89,30 @@ Global
 		{C9277826-2446-4939-8C17-1E8ED65F23B9}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
 		{C9277826-2446-4939-8C17-1E8ED65F23B9}.Release|Mixed Platforms.Build.0 = Release|Any CPU
 		{C9277826-2446-4939-8C17-1E8ED65F23B9}.Release|x86.ActiveCfg = Release|Any CPU
+		{580A5710-37C4-4C17-8C1B-82F36E0F17AA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{580A5710-37C4-4C17-8C1B-82F36E0F17AA}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{580A5710-37C4-4C17-8C1B-82F36E0F17AA}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
+		{580A5710-37C4-4C17-8C1B-82F36E0F17AA}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
+		{580A5710-37C4-4C17-8C1B-82F36E0F17AA}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{580A5710-37C4-4C17-8C1B-82F36E0F17AA}.Debug|x86.Build.0 = Debug|Any CPU
+		{580A5710-37C4-4C17-8C1B-82F36E0F17AA}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{580A5710-37C4-4C17-8C1B-82F36E0F17AA}.Release|Any CPU.Build.0 = Release|Any CPU
+		{580A5710-37C4-4C17-8C1B-82F36E0F17AA}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
+		{580A5710-37C4-4C17-8C1B-82F36E0F17AA}.Release|Mixed Platforms.Build.0 = Release|Any CPU
+		{580A5710-37C4-4C17-8C1B-82F36E0F17AA}.Release|x86.ActiveCfg = Release|Any CPU
+		{580A5710-37C4-4C17-8C1B-82F36E0F17AA}.Release|x86.Build.0 = Release|Any CPU
+		{3140C81D-E2DA-40C3-921C-B917B6125820}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3140C81D-E2DA-40C3-921C-B917B6125820}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3140C81D-E2DA-40C3-921C-B917B6125820}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
+		{3140C81D-E2DA-40C3-921C-B917B6125820}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
+		{3140C81D-E2DA-40C3-921C-B917B6125820}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{3140C81D-E2DA-40C3-921C-B917B6125820}.Debug|x86.Build.0 = Debug|Any CPU
+		{3140C81D-E2DA-40C3-921C-B917B6125820}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3140C81D-E2DA-40C3-921C-B917B6125820}.Release|Any CPU.Build.0 = Release|Any CPU
+		{3140C81D-E2DA-40C3-921C-B917B6125820}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
+		{3140C81D-E2DA-40C3-921C-B917B6125820}.Release|Mixed Platforms.Build.0 = Release|Any CPU
+		{3140C81D-E2DA-40C3-921C-B917B6125820}.Release|x86.ActiveCfg = Release|Any CPU
+		{3140C81D-E2DA-40C3-921C-B917B6125820}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

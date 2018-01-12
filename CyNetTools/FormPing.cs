@@ -510,9 +510,9 @@ namespace CyrusBuilt.CyNetTools
             if (this.saveFileDialogTool.ShowDialog() == DialogResult.OK) {
                 try {
                     var path = this.saveFileDialogTool.FileName;
-                    using (FileStream fs = new FileStream(path, FileMode.OpenOrCreate, FileAccess.ReadWrite, FileShare.None)) {
+                    using (var fs = new FileStream(path, FileMode.OpenOrCreate, FileAccess.ReadWrite, FileShare.None)) {
                         if (fs.CanWrite) {
-                            using (StreamWriter sw = new StreamWriter(fs)) {
+                            using (var sw = new StreamWriter(fs)) {
                                 sw.Write(this.richTextBoxOutput.Text);
                             }
                         }

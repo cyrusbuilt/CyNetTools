@@ -1,18 +1,16 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+<Project ToolsVersion="14.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProductVersion>8.0.30703</ProductVersion>
-    <SchemaVersion>2.0</SchemaVersion>
-    <ProjectGuid>{FBECE950-D09B-4658-B289-5443C063C7F9}</ProjectGuid>
+    <ProjectGuid>{3140C81D-E2DA-40C3-921C-B917B6125820}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>CyrusBuilt.CyNetTools.Plugins</RootNamespace>
-    <AssemblyName>CyrusBuilt.CyNetTools.Plugins</AssemblyName>
-    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
+    <RootNamespace>CyrusBuilt.CyNetTools.Plugins.Tests</RootNamespace>
+    <AssemblyName>CyrusBuilt.CyNetTools.Plugins.Tests</AssemblyName>
+    <TargetFrameworkVersion>v4.5.2</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
-    <TargetFrameworkProfile />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -22,8 +20,6 @@
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
-    <DocumentationFile>bin\Debug\CyrusBuilt.CyNetTools.Plugins.XML</DocumentationFile>
-    <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
@@ -32,50 +28,39 @@
     <DefineConstants>TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
-    <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="nunit.framework, Version=3.9.0.0, Culture=neutral, PublicKeyToken=2638cd05610744eb, processorArchitecture=MSIL">
+      <HintPath>..\packages\NUnit.3.9.0\lib\net45\nunit.framework.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
-    <Reference Include="System.Drawing" />
     <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="System.Data" />
+    <Reference Include="System.Net.Http" />
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="AvailablePlugin.cs" />
-    <Compile Include="AvailablePluginCollection.cs" />
-    <Compile Include="DuplicatePluginInstanceException.cs" />
-    <Compile Include="Events\FoundPluginEventArgs.cs" />
-    <Compile Include="Events\PluginEventHandlerDelegates.cs" />
-    <Compile Include="Events\PluginLoadedEventArgs.cs" />
-    <Compile Include="FormChangeValue.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="FormChangeValue.designer.cs">
-      <DependentUpon>FormChangeValue.cs</DependentUpon>
-    </Compile>
-    <Compile Include="FormSettingsDialog.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="FormSettingsDialog.designer.cs">
-      <DependentUpon>FormSettingsDialog.cs</DependentUpon>
-    </Compile>
-    <Compile Include="IPlugin.cs" />
-    <Compile Include="IPluginHost.cs" />
-    <Compile Include="PluginBase.cs" />
-    <Compile Include="PluginConfiguration.cs" />
-    <Compile Include="PluginManager.cs" />
+    <Compile Include="AvailablePluginTests.cs" />
+    <Compile Include="PluginCollectionTests.cs" />
+    <Compile Include="PluginConfigurationTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <WCFMetadata Include="Service References\" />
+    <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="packages.config" />
+    <ProjectReference Include="..\CyrusBuilt.CyNetTools.Plugins\CyrusBuilt.CyNetTools.Plugins.csproj">
+      <Project>{fbece950-d09b-4658-b289-5443c063c7f9}</Project>
+      <Name>CyrusBuilt.CyNetTools.Plugins</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Service Include="{82A7F48D-3B50-4B1E-B82E-3ADA8210C358}" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

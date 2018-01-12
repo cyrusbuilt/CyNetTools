@@ -188,7 +188,7 @@ namespace CyrusBuilt.CyNetTools.Plugins
             var pluginAssembly = Assembly.LoadFrom(file.FullName);
             foreach (var pluginType in pluginAssembly.GetTypes()) {
                 if ((pluginType.IsPublic) && (!pluginType.IsAbstract)) {
-                    typeInterface = pluginType.GetInterface("MAT.EventDispatchCoordinator.Plugins.IPlugin", true);
+                    typeInterface = pluginType.GetInterface("CyrusBuilt.CyNetTools.Plugins.IPlugin", true);
                     if (typeInterface != null) {
                         // Load the assembly instance if it is a valid plugin.
                         this.OnPluginFound(new FoundPluginEventArgs(file.FullName));
@@ -198,7 +198,7 @@ namespace CyrusBuilt.CyNetTools.Plugins
                         newPlugin = new AvailablePlugin(instance, file.FullName);
                         newPlugin.Instance.Host = this;
                         newPlugin.Instance.Initialize();
-                        _plugins.Add(newPlugin);
+                        this._plugins.Add(newPlugin);
                         this.OnPluginLoaded(new PluginLoadedEventArgs(instance.Name, instance.Version));
                     }
                 }

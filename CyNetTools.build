@@ -30,6 +30,7 @@
     <delete dir="${build.dir}" verbose="true" if="${directory::exists(build.dir)}" failonerror="false"/>
     <delete dir="${plugins.build.dir}" verbose="true" if="${directory::exists(plugins.build.dir)}"/>
     <delete dir="${core.build.dir}" verbose="true" if="${directory::exists(core.build.dir)}"/>
+    <delete dir="${plugintests.build.dir}" verbose="true" if="${directory::exists(plugintests.build.dir)}"/>
   </target>
   
   <!-- Prepare for debug build -->
@@ -41,6 +42,7 @@
     <property name="plugin.dir" value="${build.dir}\plugins"/>
     <property name="core.build.dir" value="${core.project.name}\bin\Debug"/>
     <property name="plugins.build.dir" value="${plugins.project.name}\bin\Debug"/>
+    <property name="plugintests.build.dir" value="${plugintests.project.name}\bin\Debug"/>
   </target>
   
   <!-- Prepare for release build -->
@@ -52,6 +54,7 @@
     <property name="plugin.dir" value="${build.dir}\plugins"/>
     <property name="core.build.dir" value="${core.project.name}\bin\Release"/>
     <property name="plugins.build.dir" value="${plugins.project.name}\bin\Release"/>
+    <property name="plugintests.build.dir" value="${plugintests.project.name}\bin\Release"/>
   </target>
   
   <!-- Build the entire solution -->
@@ -65,7 +68,7 @@
 
     <!-- We will call msbuild directly to guarantee compile success as it does -->
     <!-- in VS. This currently does not compile correctly using the solution task. -->
-    <property name="msbuild.path" value="${environment::get-folder-path('Windows')}/Microsoft.NET/Framework/v4.0.30319/msbuild.exe"/>
+    <property name="msbuild.path" value="${environment::get-folder-path('Windows')}/Microsoft.NET/Framework64/v4.0.30319/msbuild.exe"/>
     <echo message="Checking for MSBUILD..."/>
     <if test="${not file::exists(msbuild.path)}">
       <fail message="ERROR: msbuild could not be found."/>
@@ -80,6 +83,35 @@
       <arg value="/nologo"/>
     </exec>
   </target>
+
+  <!-- Run the unit tests -->
+  <target name="run.tests" description="Run tests for all test projects in solution" depends="build">
+    <property name="all.tests.passed" value="true" />
+    <foreach item="File" property="test.project">
+      <in>
+        <items basedir="${solution.dir}">
+          <include name="**bin\${build.config}\*Tests.dll" />
+        </items>
+      </in>
+      <do>
+        <exec program="${nunit.exe.dir}\nunit3-console.exe"
+              commandline="${doublequotes}${test.project}${doublequotes}"
+              workingdir="."
+              failonerror="false"
+              verbose="true"
+              resultproperty="test.result" />
+
+        <if test="${int::parse(test.result) != 0}">
+          <property name="all.tests.passed" value="false" />
+        </if>
+      </do>
+    </foreach>
+
+    <fail message="Failure reported in one or more unit tests." unless="${all.tests.passed == 'true'}" />
+  </target>
+  
+  <!-- Run unit tests -->
+  <target name="test" depends="debug,clean,run.tests" />
 
   <!-- Perform debug build of entire solution -->
   <target name="build-debug" depends="debug,clean,build" description="Debug build"/>

@@ -102,6 +102,7 @@ namespace CyrusBuilt.CyNetTools.Plugins
 
             if (!this._backingStore.ContainsKey(key)) {
                 this._backingStore.Add(key, value);
+                this._isDirty = true;
             }
             else {
                 if (this._backingStore[key] != value) {
@@ -183,17 +184,30 @@ namespace CyrusBuilt.CyNetTools.Plugins
                     if (this._backingStore.ContainsKey(key)) {
                         this.SetValue(key, config.GetValue(key));
                     }
+                    else {
+                        this.AddConfigurationSetting(key, config.GetValue(key));
+                    }
                 }
+            }
+        }
+
+        /// <summary>
+        /// Clears the entire configuration storage (all keys and values).
+        /// </summary>
+        public void Clear() {
+            if ((!this._isDisposed) && (this._backingStore != null)) {
+                this._backingStore.Clear();
             }
         }
 
         /// <summary>
         /// Clears the values of all settings in this configuration instance.
         /// </summary>
-        public void Clear() {
+        public void ClearAllValues() {
             if ((!this._isDisposed) && (this._backingStore != null)) {
                 if (this._backingStore.Count > 0) {
-                    foreach (var key in this._backingStore.Keys) {
+                    for (var i = this._backingStore.Keys.Count - 1; i >= 0; i--) {
+                        var key = this._backingStore.Keys.ToList()[i];
                         this._backingStore[key] = null;
                     }
                     this._isDirty = true;
@@ -240,15 +254,10 @@ namespace CyrusBuilt.CyNetTools.Plugins
                         name = String.Empty;
                         val = null;
                         if (reader.NodeType == XmlNodeType.Element) {
-                            switch (reader.Name) {
-                                case "setting":
-                                    name = reader.GetAttribute("name");
-                                    break;
-                                case "value":
-                                    val = reader.ReadContentAsObject();
-                                    break;
-                                default:
-                                    break;
+                            if (reader.Name == "setting") {
+                                name = reader.GetAttribute("name");
+                                reader.ReadToFollowing("value");
+                                val = reader.ReadElementContentAsObject();
                             }
                         }
 

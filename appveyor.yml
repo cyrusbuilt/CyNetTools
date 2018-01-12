@@ -1,0 +1,49 @@
+#---------------------------------#
+#      general configuration      #
+#---------------------------------#
+
+version: 1.0.{build}-{branch}
+
+#---------------------------------#
+#    environment configuration    #
+#---------------------------------#
+
+# Operating system (build VM template)
+os: Visual Studio 2015
+
+#---------------------------------#
+#       install dependecies       #
+#---------------------------------#
+
+install:
+    - cmd: appveyor DownloadFile https://dist.nuget.org/win-x86-commandline/latest/nuget.exe
+    - cmd: appveyor-retry nuget restore -verbosity detailed
+
+cache:
+    - packages -> **\packages.config
+
+#---------------------------------#
+#       build configuration       #
+#---------------------------------#
+
+build_script:
+    - cmd: make.cmd test
+
+# Disable test search, since we'll be doing this in our NAnt script.
+test: off
+
+#---------------------------------#
+#           artifacts             #
+#---------------------------------#
+
+#---------------------------------#
+#         notifications           #
+#---------------------------------#
+
+notifications:
+    - provider: Email
+    to:
+        - cyrusbuilt@gmail.com
+    on_build_success: false
+    on_build_failure: true
+    on_build_changed: false

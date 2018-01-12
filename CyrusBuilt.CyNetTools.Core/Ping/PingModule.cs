@@ -641,7 +641,7 @@ namespace CyrusBuilt.CyNetTools.Core.Ping
         /// The ping executable could not be found.
         /// </exception>
         public override void Start() {
-            if (base._isRunning) {
+            if (base.IsRunning) {
                 return;
             }
 

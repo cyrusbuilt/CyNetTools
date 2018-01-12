@@ -172,7 +172,7 @@ namespace CyrusBuilt.CyNetTools.Core.Arp
             base._isRunning = false;
 
             // **** Perform sanity checks ****
-            String args = ArpUtils.GetArpCommandString(this._command);
+            var args = ArpUtils.GetArpCommandString(this._command);
             switch (this._command) {
                 case ArpCommand.ShowAll:
                     if ((this._inetAddr != null) && (this._inetAddr != IPAddress.None)) {
