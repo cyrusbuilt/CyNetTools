@@ -9,6 +9,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 		build.properties = build.properties
 		CyNetTools.build = CyNetTools.build
 		make.cmd = make.cmd
+		README.md = README.md
 	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CyNetTools", "CyNetTools\CyNetTools.csproj", "{09ADD979-C2DB-4BBB-BA72-28E96BA09788}"
