@@ -39,7 +39,6 @@ test: off
 artifacts:
   - path: TestResult.xml
     name: testresults
-	
 
 #---------------------------------#
 #         notifications           #
