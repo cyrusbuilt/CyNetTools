@@ -29,8 +29,10 @@ cache:
 build_script:
     - cmd: make.cmd test
 
-# Disable test search, since we'll be doing this in our NAnt script.
-test: off
+# Run the unit tests.
+test:
+  assemblies:
+    - '**\*.Tests.dll'
 
 #---------------------------------#
 #           artifacts             #
