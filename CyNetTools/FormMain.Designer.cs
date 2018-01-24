@@ -25,7 +25,6 @@
         /// the contents of this method with the code editor.
         /// </summary>
         private void InitializeComponent() {
-            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(FormMain));
             this.menuStripMain = new System.Windows.Forms.MenuStrip();
             this.fileToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.exitToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -35,17 +34,19 @@
             this.toolsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.helpToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripMain = new System.Windows.Forms.ToolStrip();
+            this.toolStripButtonPing = new System.Windows.Forms.ToolStripButton();
+            this.toolStripButtonTrace = new System.Windows.Forms.ToolStripButton();
             this.cascadeToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.tileHorizontalToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.tileVerticalToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.arangeIconsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.toolStripButtonPing = new System.Windows.Forms.ToolStripButton();
             this.menuStripMain.SuspendLayout();
             this.toolStripMain.SuspendLayout();
             this.SuspendLayout();
             // 
             // menuStripMain
             // 
+            this.menuStripMain.ImageScalingSize = new System.Drawing.Size(32, 32);
             this.menuStripMain.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.fileToolStripMenuItem,
             this.viewToolStripMenuItem,
@@ -54,7 +55,8 @@
             this.menuStripMain.Location = new System.Drawing.Point(0, 0);
             this.menuStripMain.MdiWindowListItem = this.viewToolStripMenuItem;
             this.menuStripMain.Name = "menuStripMain";
-            this.menuStripMain.Size = new System.Drawing.Size(803, 24);
+            this.menuStripMain.Padding = new System.Windows.Forms.Padding(12, 4, 0, 4);
+            this.menuStripMain.Size = new System.Drawing.Size(1606, 44);
             this.menuStripMain.TabIndex = 1;
             this.menuStripMain.Text = "menuStrip1";
             // 
@@ -63,13 +65,13 @@
             this.fileToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.exitToolStripMenuItem});
             this.fileToolStripMenuItem.Name = "fileToolStripMenuItem";
-            this.fileToolStripMenuItem.Size = new System.Drawing.Size(37, 20);
+            this.fileToolStripMenuItem.Size = new System.Drawing.Size(64, 36);
             this.fileToolStripMenuItem.Text = "File";
             // 
             // exitToolStripMenuItem
             // 
             this.exitToolStripMenuItem.Name = "exitToolStripMenuItem";
-            this.exitToolStripMenuItem.Size = new System.Drawing.Size(92, 22);
+            this.exitToolStripMenuItem.Size = new System.Drawing.Size(151, 38);
             this.exitToolStripMenuItem.Text = "Exit";
             this.exitToolStripMenuItem.Click += new System.EventHandler(this.exitToolStripMenuItem_Click);
             // 
@@ -83,48 +85,72 @@
             this.closeAllToolStripMenuItem,
             this.toolStripSeparator1});
             this.viewToolStripMenuItem.Name = "viewToolStripMenuItem";
-            this.viewToolStripMenuItem.Size = new System.Drawing.Size(44, 20);
+            this.viewToolStripMenuItem.Size = new System.Drawing.Size(78, 36);
             this.viewToolStripMenuItem.Text = "View";
             // 
             // closeAllToolStripMenuItem
             // 
             this.closeAllToolStripMenuItem.Name = "closeAllToolStripMenuItem";
-            this.closeAllToolStripMenuItem.Size = new System.Drawing.Size(151, 22);
+            this.closeAllToolStripMenuItem.Size = new System.Drawing.Size(269, 38);
             this.closeAllToolStripMenuItem.Text = "Close All";
             this.closeAllToolStripMenuItem.Click += new System.EventHandler(this.closeAllToolStripMenuItem_Click);
             // 
             // toolStripSeparator1
             // 
             this.toolStripSeparator1.Name = "toolStripSeparator1";
-            this.toolStripSeparator1.Size = new System.Drawing.Size(148, 6);
+            this.toolStripSeparator1.Size = new System.Drawing.Size(266, 6);
             // 
             // toolsToolStripMenuItem
             // 
             this.toolsToolStripMenuItem.Name = "toolsToolStripMenuItem";
-            this.toolsToolStripMenuItem.Size = new System.Drawing.Size(48, 20);
+            this.toolsToolStripMenuItem.Size = new System.Drawing.Size(82, 36);
             this.toolsToolStripMenuItem.Text = "Tools";
             // 
             // helpToolStripMenuItem
             // 
             this.helpToolStripMenuItem.Name = "helpToolStripMenuItem";
-            this.helpToolStripMenuItem.Size = new System.Drawing.Size(44, 20);
+            this.helpToolStripMenuItem.Size = new System.Drawing.Size(77, 36);
             this.helpToolStripMenuItem.Text = "Help";
             // 
             // toolStripMain
             // 
+            this.toolStripMain.ImageScalingSize = new System.Drawing.Size(32, 32);
             this.toolStripMain.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.toolStripButtonPing});
-            this.toolStripMain.Location = new System.Drawing.Point(0, 24);
+            this.toolStripButtonPing,
+            this.toolStripButtonTrace});
+            this.toolStripMain.Location = new System.Drawing.Point(0, 44);
             this.toolStripMain.Name = "toolStripMain";
-            this.toolStripMain.Size = new System.Drawing.Size(803, 25);
+            this.toolStripMain.Padding = new System.Windows.Forms.Padding(0, 0, 2, 0);
+            this.toolStripMain.Size = new System.Drawing.Size(1606, 39);
             this.toolStripMain.TabIndex = 3;
             this.toolStripMain.Text = "toolStrip1";
+            // 
+            // toolStripButtonPing
+            // 
+            this.toolStripButtonPing.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            this.toolStripButtonPing.Image = global::CyrusBuilt.CyNetTools.Properties.Resources.transmit_blue;
+            this.toolStripButtonPing.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.toolStripButtonPing.Name = "toolStripButtonPing";
+            this.toolStripButtonPing.Size = new System.Drawing.Size(36, 36);
+            this.toolStripButtonPing.Text = "Ping";
+            this.toolStripButtonPing.Click += new System.EventHandler(this.toolStripButtonPing_Click);
+            // 
+            // toolStripButtonTrace
+            // 
+            this.toolStripButtonTrace.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            this.toolStripButtonTrace.Image = global::CyrusBuilt.CyNetTools.Properties.Resources.world_go;
+            this.toolStripButtonTrace.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.toolStripButtonTrace.Name = "toolStripButtonTrace";
+            this.toolStripButtonTrace.Size = new System.Drawing.Size(36, 36);
+            this.toolStripButtonTrace.Text = "Trace Route";
+            this.toolStripButtonTrace.ToolTipText = "Trace Route";
+            this.toolStripButtonTrace.Click += new System.EventHandler(this.toolStripButtonTrace_Click);
             // 
             // cascadeToolStripMenuItem
             // 
             this.cascadeToolStripMenuItem.Image = global::CyrusBuilt.CyNetTools.Properties.Resources.application_cascade;
             this.cascadeToolStripMenuItem.Name = "cascadeToolStripMenuItem";
-            this.cascadeToolStripMenuItem.Size = new System.Drawing.Size(151, 22);
+            this.cascadeToolStripMenuItem.Size = new System.Drawing.Size(269, 38);
             this.cascadeToolStripMenuItem.Text = "Cascade";
             this.cascadeToolStripMenuItem.Click += new System.EventHandler(this.cascadeToolStripMenuItem_Click);
             // 
@@ -132,7 +158,7 @@
             // 
             this.tileHorizontalToolStripMenuItem.Image = global::CyrusBuilt.CyNetTools.Properties.Resources.application_tile_horizontal;
             this.tileHorizontalToolStripMenuItem.Name = "tileHorizontalToolStripMenuItem";
-            this.tileHorizontalToolStripMenuItem.Size = new System.Drawing.Size(151, 22);
+            this.tileHorizontalToolStripMenuItem.Size = new System.Drawing.Size(269, 38);
             this.tileHorizontalToolStripMenuItem.Text = "Tile Horizontal";
             this.tileHorizontalToolStripMenuItem.Click += new System.EventHandler(this.tileHorizontalToolStripMenuItem_Click);
             // 
@@ -140,7 +166,7 @@
             // 
             this.tileVerticalToolStripMenuItem.Image = global::CyrusBuilt.CyNetTools.Properties.Resources.application_tile_vertical;
             this.tileVerticalToolStripMenuItem.Name = "tileVerticalToolStripMenuItem";
-            this.tileVerticalToolStripMenuItem.Size = new System.Drawing.Size(151, 22);
+            this.tileVerticalToolStripMenuItem.Size = new System.Drawing.Size(269, 38);
             this.tileVerticalToolStripMenuItem.Text = "Tile Vertical";
             this.tileVerticalToolStripMenuItem.Click += new System.EventHandler(this.tileVerticalToolStripMenuItem_Click);
             // 
@@ -148,29 +174,20 @@
             // 
             this.arangeIconsToolStripMenuItem.Image = global::CyrusBuilt.CyNetTools.Properties.Resources.application_view_icons;
             this.arangeIconsToolStripMenuItem.Name = "arangeIconsToolStripMenuItem";
-            this.arangeIconsToolStripMenuItem.Size = new System.Drawing.Size(151, 22);
+            this.arangeIconsToolStripMenuItem.Size = new System.Drawing.Size(269, 38);
             this.arangeIconsToolStripMenuItem.Text = "Arange Icons";
             this.arangeIconsToolStripMenuItem.Click += new System.EventHandler(this.arangeIconsToolStripMenuItem_Click);
             // 
-            // toolStripButtonPing
-            // 
-            this.toolStripButtonPing.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
-            this.toolStripButtonPing.Image = ((System.Drawing.Image)(resources.GetObject("toolStripButtonPing.Image")));
-            this.toolStripButtonPing.ImageTransparentColor = System.Drawing.Color.Magenta;
-            this.toolStripButtonPing.Name = "toolStripButtonPing";
-            this.toolStripButtonPing.Size = new System.Drawing.Size(23, 22);
-            this.toolStripButtonPing.Text = "Ping";
-            this.toolStripButtonPing.Click += new System.EventHandler(this.toolStripButtonPing_Click);
-            // 
             // FormMain
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
+            this.AutoScaleDimensions = new System.Drawing.SizeF(12F, 25F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(803, 588);
+            this.ClientSize = new System.Drawing.Size(1606, 1131);
             this.Controls.Add(this.toolStripMain);
             this.Controls.Add(this.menuStripMain);
             this.IsMdiContainer = true;
             this.MainMenuStrip = this.menuStripMain;
+            this.Margin = new System.Windows.Forms.Padding(6);
             this.Name = "FormMain";
             this.Text = "CyNetTools";
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.FormMain_FormClosing);
@@ -200,6 +217,7 @@
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator1;
         private System.Windows.Forms.ToolStripMenuItem closeAllToolStripMenuItem;
         private System.Windows.Forms.ToolStripButton toolStripButtonPing;
+        private System.Windows.Forms.ToolStripButton toolStripButtonTrace;
     }
 }
 

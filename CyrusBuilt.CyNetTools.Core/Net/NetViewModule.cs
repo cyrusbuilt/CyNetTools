@@ -212,7 +212,7 @@ namespace CyrusBuilt.CyNetTools.Core.Net
             }
 
             // Setup remaining start parameters.
-            this._startInfo.UseShellExecute = true;
+            this._startInfo.UseShellExecute = false;
             this._startInfo.RedirectStandardError = false;
             this._startInfo.RedirectStandardInput = false;
             this._startInfo.RedirectStandardOutput = true;

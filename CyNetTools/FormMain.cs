@@ -117,6 +117,11 @@ namespace CyrusBuilt.CyNetTools
             var fp = new FormPing(this);
             fp.Show();
         }
+
+        private void toolStripButtonTrace_Click(object sender, EventArgs e) {
+            var ft = new FormTraceroute(this);
+            ft.Show();
+        }
         #endregion
     }
 }

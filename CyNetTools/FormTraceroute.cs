@@ -1,19 +1,24 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.ComponentModel;
+using System.Data;
 using System.Drawing;
 using System.Drawing.Printing;
 using System.IO;
 using System.Net;
 using System.Security;
+using System.Text;
+using System.Threading.Tasks;
 using System.Windows.Forms;
 using CyrusBuilt.CyNetTools.Core;
-using CyrusBuilt.CyNetTools.Core.Ping;
+using CyrusBuilt.CyNetTools.Core.TraceRoute;
 
 namespace CyrusBuilt.CyNetTools
 {
     /// <summary>
-    /// The UI form for the ping tool.
+    /// 
     /// </summary>
-    public partial class FormPing : Form
+    public partial class FormTraceroute : Form
     {
         #region Fields
         private PrintDocument _printDoc = null;
@@ -22,22 +27,21 @@ namespace CyrusBuilt.CyNetTools
         private String _lastDir = String.Empty;
         private Font _currentFont = null;
         private DateTime _startTime = DateTime.MinValue;
-        private PingModule _pm = null;
+        private TraceRouteModule _trm = null;
         #endregion
 
         #region Constructors
         /// <summary>
-        /// Initializes a new instance of the <see cref="CyrusBuilt.CyNetTools.FormPinge"/>
-        /// class. This is the default constructor.
+        /// 
         /// </summary>
         /// <param name="mdiParent">
-        /// The form that is the MDI parent of this form.
+        /// 
         /// </param>
-        public FormPing(Form mdiParent) {
+        public FormTraceroute(Form mdiParent) {
             this.InitializeComponent();
             this.MdiParent = mdiParent;
             this._printDoc = new PrintDocument();
-            this._pm = new PingModule();
+            this._trm = new TraceRouteModule();
         }
         #endregion
 
@@ -245,29 +249,25 @@ namespace CyrusBuilt.CyNetTools
         }
 
         /// <summary>
-        /// Registers event handlers for PingModule events.
+        /// Registers event handlers for TraceRouteModule events.
         /// </summary>
-        private void RegisterPingEvents() {
-            if (this._pm != null) {
-                this._pm.OutputReceived += new ProcessOutputEventHandler(this.Pm_OutputReceived);
-                this._pm.ProcessCancelled += new ProcessCancelledEventHandler(this.Pm_ProcessCancelled);
-                this._pm.ProcessFinished += new ProcessDoneEventHandler(this.Pm_ProcessFinished);
-                this._pm.ProcessStarted += new ProcessRunningEventHandler(this.Pm_ProcessStarted);
-                this._pm.Progress += new PingProgressEventHandler(this.Pm_Progress);
-            }
+        private void RegisterTraceEvents() {
+            this._trm.OutputReceived += new ProcessOutputEventHandler(this.Trm_OutputReceived);
+            this._trm.ProcessCancelled += new ProcessCancelledEventHandler(this.Trm_ProcessCancelled);
+            this._trm.ProcessFinished += new ProcessDoneEventHandler(this.Trm_ProcessFinished);
+            this._trm.ProcessStarted += new ProcessRunningEventHandler(this.Trm_ProcessStarted);
+            this._trm.Progress += new TraceProgressEventHandler(this.Trm_Progress);
         }
 
         /// <summary>
-        /// Unregisters PingModule event handlers.
+        /// Unregisters TraceRouteModule event handlers.
         /// </summary>
-        private void UnregisterPingEvents() {
-            if (this._pm != null) {
-                this._pm.OutputReceived -= new ProcessOutputEventHandler(this.Pm_OutputReceived);
-                this._pm.ProcessCancelled -= new ProcessCancelledEventHandler(this.Pm_ProcessCancelled);
-                this._pm.ProcessFinished -= new ProcessDoneEventHandler(this.Pm_ProcessFinished);
-                this._pm.ProcessStarted -= new ProcessRunningEventHandler(this.Pm_ProcessStarted);
-                this._pm.Progress -= new PingProgressEventHandler(this.Pm_Progress);
-            }
+        private void UnregisterTraceEvents() {
+            this._trm.OutputReceived -= new ProcessOutputEventHandler(this.Trm_OutputReceived);
+            this._trm.ProcessCancelled -= new ProcessCancelledEventHandler(this.Trm_ProcessCancelled);
+            this._trm.ProcessFinished -= new ProcessDoneEventHandler(this.Trm_ProcessFinished);
+            this._trm.ProcessStarted -= new ProcessRunningEventHandler(this.Trm_ProcessStarted);
+            this._trm.Progress -= new TraceProgressEventHandler(this.Trm_Progress);
         }
 
         /// <summary>
@@ -278,7 +278,7 @@ namespace CyrusBuilt.CyNetTools
             this.comboBoxProtocol.Items.Clear();
             this.comboBoxProtocol.Items.Add(Enum.GetName(typeof(IPVersion), IPVersion.IPv4));
             this.comboBoxProtocol.Items.Add(Enum.GetName(typeof(IPVersion), IPVersion.IPv6));
-            var def = Enum.GetName(typeof(IPVersion), this._pm.IPProtocolVersion);
+            var def = Enum.GetName(typeof(IPVersion), this._trm.IPProtocolVersion);
             this.comboBoxProtocol.SelectedItem = def;
             this.comboBoxProtocol.EndUpdate();
         }
@@ -287,26 +287,22 @@ namespace CyrusBuilt.CyNetTools
         /// Initializes the error provider.
         /// </summary>
         private void InitErrorProvider() {
-            this.errorProviderPing.Clear();
-            this.errorProviderPing.SetError(this.textBoxHost, String.Empty);
-            this.errorProviderPing.SetError(this.maskedTextBoxSrcAddr, String.Empty);
-            this.errorProviderPing.SetError(this.textBoxTTL, String.Empty);
+            this.errorProviderTrace.Clear();
+            this.errorProviderTrace.SetError(this.textBoxTargetHost, String.Empty);
+            this.errorProviderTrace.SetError(this.maskedTextBoxSourceAddr, String.Empty);
         }
 
         /// <summary>
         /// Enables protocol-specific controls based on the selected protocol.
         /// </summary>
         private void EnableProtocolSpecificControls() {
-            var selection = this.comboBoxSrcRouteMode.SelectedIndex;
-            this._pm.IPProtocolVersion = (selection == 0 ? IPVersion.IPv4 : IPVersion.IPv6);
-            var isIPv4 = (this._pm.IPProtocolVersion == IPVersion.IPv4);
-            var isIPv6 = (this._pm.IPProtocolVersion == IPVersion.IPv6);
-            this.checkBoxNoFrag.Enabled = isIPv4;
-            this.numericUpDownRecordHopCount.Enabled = isIPv4;
-            this.comboBoxSrcRouteMode.Enabled = isIPv4;
-            this.textBoxSrcRouteList.Enabled = ((isIPv4) && ((RouteMode)selection != RouteMode.None));
-            this.numericUpDownTimestamp.Enabled = isIPv4;
-            this.checkBoxReverseRoute.Enabled = isIPv6;
+            var selection = this.comboBoxProtocol.SelectedIndex;
+            this._trm.IPProtocolVersion = (selection == 0 ? IPVersion.IPv4 : IPVersion.IPv6);
+            var isIPv6 = (this._trm.IPProtocolVersion == IPVersion.IPv6);
+            var isIPv4 = (this._trm.IPProtocolVersion == IPVersion.IPv4);
+            this.checkBoxRoundTrip.Enabled = isIPv6;
+            this.maskedTextBoxSourceAddr.Enabled = isIPv6;
+            this.textBoxHostList.Enabled = isIPv4;
         }
 
         /// <summary>
@@ -356,40 +352,6 @@ namespace CyrusBuilt.CyNetTools
         }
 
         /// <summary>
-        /// Initializes the source route drop-down menu.
-        /// </summary>
-        private void InitSrcRouteDropDown() {
-            this.comboBoxSrcRouteMode.BeginUpdate();
-            this.comboBoxSrcRouteMode.Items.Clear();
-            this.comboBoxSrcRouteMode.Items.Add(Enum.GetName(typeof(RouteMode), RouteMode.None));
-            this.comboBoxSrcRouteMode.Items.Add(Enum.GetName(typeof(RouteMode), RouteMode.Loose));
-            this.comboBoxSrcRouteMode.Items.Add(Enum.GetName(typeof(RouteMode), RouteMode.Strict));
-            this.comboBoxSrcRouteMode.SelectedIndex = (Int32)RouteMode.None;
-            this.comboBoxSrcRouteMode.EndUpdate();
-        }
-
-        /// <summary>
-        /// Configures the ping module for default execution settings.
-        /// </summary>
-        private void SetDefaults() {
-            // Set all control defaults.
-            this.checkBoxContinuous.Checked = this._pm.ContinuousPing;
-            this.checkBoxResolve.Checked = this._pm.ResolveHostNames;
-            this.textBoxReqCount.Text = PingModule.DEFAULT_REQ_COUNT.ToString();
-            this.numericUpDownBufferSize.Value = this._pm.BufferSize;
-            this.numericUpDownBufferSize.Maximum = PingModule.MAX_BUFFER_SIZE;
-            this.checkBoxNoFrag.Checked = this._pm.DoNotFragment;
-            this.maskedTextBoxSrcAddr.ValidatingType = typeof(IPAddress);
-            this.numericUpDownRecordHopCount.Maximum = PingModule.MAX_ROUTE_HOPS;
-            this.numericUpDownRecordHopCount.Value = this._pm.RecordHopCount;
-            this.checkBoxReverseRoute.Checked = this._pm.TestReversRoute;
-            this.comboBoxSrcRouteMode.SelectedIndex = (Int32)this._pm.SourceRouteMode;
-            this.numericUpDownTimestamp.Maximum = PingModule.MAX_TIMESTAMP_HOPS;
-            this.numericUpDownTimestamp.Value = this._pm.TimestampCount;
-            this.textBoxTTL.Text = this._pm.TimeToLive.ToString();
-        }
-
-        /// <summary>
         /// Thread-safe method for toggling the run timer on/off.
         /// </summary>
         /// <param name="enabled">
@@ -407,7 +369,6 @@ namespace CyrusBuilt.CyNetTools
         }
         #endregion
 
-        #region Event Handlers
         /// <summary>
         /// Handles the end-of-printing event. This simply closes the text stream.
         /// </summary>
@@ -485,6 +446,55 @@ namespace CyrusBuilt.CyNetTools
             this._sr = new StringReader(this.richTextBoxOutput.Text);
             this._currentFont = this.richTextBoxOutput.Font;
             this._pageIndex = this._printDoc.PrinterSettings.FromPage;
+        }
+
+        /// <summary>
+        /// Handles the "Execute" toolbar button click event. This should run whatever
+        /// process or main method represented by this form.
+        /// </summary>
+        /// <param name="sender">
+        /// The object sending the event call.
+        /// </param>
+        /// <param name="e">
+        /// The event arguments.
+        /// </param>
+        private void toolStripButtonExec_Click(object sender, EventArgs e) {
+            this.InitErrorProvider();
+            var host = this.textBoxTargetHost.Text.Trim();
+            if (String.IsNullOrEmpty(host)) {
+                this.errorProviderTrace.SetError(this.textBoxTargetHost, "No host name or IP specified.");
+                this.tabControlMain.SelectedTab = this.tabPageOutput;
+                this.textBoxTargetHost.Select();
+                return;
+            }
+
+            var timeoutStr = this.textBoxTimeout.Text.Trim();
+            if (!String.IsNullOrEmpty(timeoutStr)) {
+                var timeout = 0;
+                if (Int32.TryParse(timeoutStr, out timeout)) {
+                    this._trm.Timeout = timeout;
+                }
+            }
+
+            this._trm.HostList = this.textBoxHostList.Text.Trim();
+            this._trm.TargetHost = host;
+            this._startTime = DateTime.Now;
+            this._trm.Start();
+        }
+
+        /// <summary>
+        /// Handles the "Cancel" toolbar button click event. This should terminate
+        /// whatever process is spawned by the <see cref="toolStripButtonExec_Click"/>
+        /// handler.
+        /// </summary>
+        /// <param name="sender">
+        /// The object sending the event call.
+        /// </param>
+        /// <param name="e">
+        /// The event arguments.
+        /// </param>
+        private void toolStripButtonCancel_Click(object sender, EventArgs e) {
+            this._trm.Cancel();
         }
 
         /// <summary>
@@ -620,193 +630,28 @@ namespace CyrusBuilt.CyNetTools
         }
 
         /// <summary>
-        /// Handles the form load event. This initializes the additional controls
-        /// and subsystems.
+        /// 
         /// </summary>
         /// <param name="sender">
-        /// The object sending the event call.
+        /// 
         /// </param>
         /// <param name="e">
-        /// The event arguments.
+        /// 
         /// </param>
-        private void FormPing_Load(object sender, EventArgs e) {
-            this.SuspendLayout();
-            this.InitPrintDocument();
-            this.InitSaveFileDialog();
-            this.InitProtocolDropDown();
-            this.InitErrorProvider();
-            this.InitSrcRouteDropDown();
-            this.RegisterPingEvents();
-            this.SetDefaults();
-            this.EnableProtocolSpecificControls();
-            this.textBoxHost.Select();
-            this.ResumeLayout();
+        private void Trm_OutputReceived(object sender, ProcessOutputEventArgs e) {
+            this.SafeWriteConsole(e.StandardOutput);
         }
 
         /// <summary>
-        /// Handles the form closing event. This stops and destroys all additional
-        /// subsystems prior to form destruction.
+        /// 
         /// </summary>
         /// <param name="sender">
-        /// The object sending the event call.
+        /// 
         /// </param>
         /// <param name="e">
-        /// The event arguments.
+        /// 
         /// </param>
-        private void FormExternalToolBase_FormClosing(object sender, FormClosingEventArgs e) {
-            if (this._sr != null) {
-                this._sr.Dispose();
-                this._sr = null;
-            }
-
-            if (this._printDoc != null) {
-                this._printDoc.Dispose();
-                this._printDoc = null;
-            }
-
-            this.UnregisterPingEvents();
-            if (this._pm != null) {
-                if (this._pm.IsRunning) {
-                    this._pm.Cancel();
-                }
-                this._pm.Dispose();
-                this._pm = null;
-            }
-        }
-
-        /// <summary>
-        /// Handles the timer tick which will fire once per second while the
-        /// timer is running.
-        /// </summary>
-        /// <param name="sender">
-        /// The object sending the event call.
-        /// </param>
-        /// <param name="e">
-        /// The event arguments.
-        /// </param>
-        private void timerRuntime_Tick(object sender, EventArgs e) {
-            var span = (DateTime.Now - this._startTime);
-            var t = span.Hours.ToString() + ":" + span.Minutes.ToString() + ":" + span.Seconds.ToString() + "." + span.Milliseconds.ToString();
-            this.SafeUpdateRuntime(t);
-        }
-
-        /// <summary>
-        /// Handles the "Cancel" toolbar button click event. This should terminate
-        /// whatever process is spawned by the <see cref="toolStripButtonExec_Click"/>
-        /// handler.
-        /// </summary>
-        /// <param name="sender">
-        /// The object sending the event call.
-        /// </param>
-        /// <param name="e">
-        /// The event arguments.
-        /// </param>
-        private void toolStripButtonCancel_Click(object sender, EventArgs e) {
-            this._pm.Cancel();
-        }
-
-        /// <summary>
-        /// Handles the "Execute" toolbar button click event. This should run whatever
-        /// process or main method represented by this form.
-        /// </summary>
-        /// <param name="sender">
-        /// The object sending the event call.
-        /// </param>
-        /// <param name="e">
-        /// The event arguments.
-        /// </param>
-        private void toolStripButtonExec_Click(object sender, EventArgs e) {
-            this.InitErrorProvider();
-            var host = this.textBoxHost.Text.Trim();
-            if (String.IsNullOrEmpty(host)) {
-                this.errorProviderPing.SetError(this.textBoxHost, "No host name or IP specified.");
-                this.tabControlMain.SelectedTab = this.tabPageOutput;
-                this.textBoxHost.Select();
-                return;
-            }
-
-            var countStr = this.textBoxReqCount.Text.Trim();
-            if (!String.IsNullOrEmpty(countStr)) {
-                var count = 0;
-                if (Int32.TryParse(countStr, out count)) {
-                    this._pm.RequestCount = count;
-                }
-            }
-
-            this._pm.SourceRouteList = this.textBoxSrcRouteList.Text.Trim();
-            this._pm.TargetHost = host;
-            this._startTime = DateTime.Now;
-            this._pm.Start();
-        }
-
-        /// <summary>
-        /// Handles the ping module progress event. This updates the progress
-        /// bar and statistics labels.
-        /// </summary>
-        /// <param name="sender">
-        /// The object sending the event call.
-        /// </param>
-        /// <param name="e">
-        /// The event arguments.
-        /// </param>
-        private void Pm_Progress(object sender, PingProgressEventArgs e) {
-            this.SafeSetProgressBarValue(e.PercentComplete);
-            this.SafeSetLabelText(this.labelLostField, e.RequestsFailed.ToString());
-            this.SafeSetLabelText(this.labelReceivedField, e.RequestsCompleted.ToString());
-            this.SafeSetLabelText(this.labelPacketLossField, e.PacketLoss.ToString() + "%");
-        }
-
-        /// <summary>
-        /// Handles the ping module start event. This turns on the run animation
-        /// and run timer and notifies the user that the process has started.
-        /// </summary>
-        /// <param name="sender">
-        /// The object sending the event call.
-        /// </param>
-        /// <param name="e">
-        /// The event arguments.
-        /// </param>
-        private void Pm_ProcessStarted(object sender, ProcessStartedEventArgs e) {
-            this.SafeToggleStatusAnim(true);
-            this.SafeUpdateStatus("Running");
-            this.SafeWriteConsole("Process started with PID: " + e.ProcessID.ToString());
-            this.SafeToggleToolbarButton(this.toolStripButtonExec, false);
-            this.SafeToggleToolbarButton(this.toolStripButtonCancel, true);
-            this.SafeToggleTimer(true);
-        }
-
-        /// <summary>
-        /// Handles this ping module finished event. This turns off the run
-        /// timer and animation and notifies the user that the process has
-        /// stopped.
-        /// </summary>
-        /// <param name="sender">
-        /// The object sending the event call.
-        /// </param>
-        /// <param name="e">
-        /// The event arguments.
-        /// </param>
-        private void Pm_ProcessFinished(object sender, ProccessDoneEventArgs e) {
-            this.SafeToggleStatusAnim(false);
-            this.SafeUpdateStatus("Finished");
-            this.SafeWriteConsole("Process exit code: " + e.ExitCode.ToString());
-            this.SafeToggleToolbarButton(this.toolStripButtonCancel, false);
-            this.SafeToggleToolbarButton(this.toolStripButtonExec, true);
-            this.SafeToggleTimer(false);
-        }
-
-        /// <summary>
-        /// Handles the ping module cancelled event. This turns off the run
-        /// timer and animation and notifies the user that the process was
-        /// terminated due to force from the user or due to an error.
-        /// </summary>
-        /// <param name="sender">
-        /// The object sending the event call.
-        /// </param>
-        /// <param name="e">
-        /// The event arguments.
-        /// </param>
-        private void Pm_ProcessCancelled(object sender, ProcessCancelledEventArgs e) {
+        private void Trm_ProcessCancelled(object sender, ProcessCancelledEventArgs e) {
             this.SafeToggleStatusAnim(false);
             this.SafeUpdateStatus("Cancelled");
             this.SafeToggleToolbarButton(this.toolStripButtonCancel, false);
@@ -818,45 +663,64 @@ namespace CyrusBuilt.CyNetTools
         }
 
         /// <summary>
-        /// Handles the output event from the ping module. This writes the
-        /// output received to the console textbox.
+        /// 
         /// </summary>
         /// <param name="sender">
-        /// The object sending the event call.
+        /// 
         /// </param>
         /// <param name="e">
-        /// The event arguments.
+        /// 
         /// </param>
-        private void Pm_OutputReceived(object sender, ProcessOutputEventArgs e) {
-            this.SafeWriteConsole(e.StandardOutput);
+        private void Trm_ProcessFinished(object sender, ProccessDoneEventArgs e) {
+            this.SafeToggleStatusAnim(false);
+            this.SafeUpdateStatus("Finished");
+            this.SafeWriteConsole("Process exit code: " + e.ExitCode.ToString());
+            this.SafeToggleToolbarButton(this.toolStripButtonCancel, false);
+            this.SafeToggleToolbarButton(this.toolStripButtonExec, true);
+            this.SafeToggleTimer(false);
         }
 
         /// <summary>
-        /// Handles the continuous ping checkbox checked event. This enables/disables
-        /// continuous ping option and the request count textbox based on the
-        /// checkbox checked state.
+        /// 
         /// </summary>
         /// <param name="sender">
-        /// The object sending the event call.
+        /// 
         /// </param>
         /// <param name="e">
-        /// The event arguments.
+        /// 
         /// </param>
-        private void checkBoxContinuous_CheckedChanged(object sender, EventArgs e) {
-            var check = this.checkBoxContinuous.Checked;
-            this._pm.ContinuousPing = check;
-            this.textBoxReqCount.Enabled = !check;
+        private void Trm_ProcessStarted(object sender, ProcessStartedEventArgs e) {
+            this.SafeToggleStatusAnim(true);
+            this.SafeUpdateStatus("Running");
+            this.SafeWriteConsole("Process started with PID: " + e.ProcessID.ToString());
+            this.SafeToggleToolbarButton(this.toolStripButtonExec, false);
+            this.SafeToggleToolbarButton(this.toolStripButtonCancel, true);
+            this.SafeToggleTimer(true);
         }
 
         /// <summary>
-        /// Handles the protocol dropdown menu selection change event. The will enable specific
-        /// controls related to the selected protocol.
+        /// 
         /// </summary>
         /// <param name="sender">
-        /// The object sending the event call.
+        /// 
         /// </param>
         /// <param name="e">
-        /// The event arguments.
+        /// 
+        /// </param>
+        private void Trm_Progress(object sender, TraceProgressEventArgs e) {
+            this.SafeSetProgressBarValue(e.Progress);
+            this.SafeSetLabelText(this.labelCurrentHopActual, e.CurrentHop.ToString());
+            this.SafeSetLabelText(this.labelTotalHopsActual, e.TotalHops.ToString());
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="sender">
+        /// 
+        /// </param>
+        /// <param name="e">
+        /// 
         /// </param>
         private void comboBoxProtocol_SelectedIndexChanged(object sender, EventArgs e) {
             this.EnableProtocolSpecificControls();
@@ -866,58 +730,45 @@ namespace CyrusBuilt.CyNetTools
         /// 
         /// </summary>
         /// <param name="sender">
-        /// The object sending the event call.
+        /// 
         /// </param>
         /// <param name="e">
-        /// The event arguments.
+        /// 
         /// </param>
-        private void checkBoxResolve_CheckedChanged(object sender, EventArgs e) {
-            this._pm.ResolveHostNames = this.checkBoxResolve.Checked;
+        private void checkBoxRoundTrip_CheckedChanged(object sender, EventArgs e) {
+            this._trm.RoundTrip = this.checkBoxRoundTrip.Checked;
         }
 
         /// <summary>
         /// 
         /// </summary>
         /// <param name="sender">
-        /// The object sending the event call.
+        /// 
         /// </param>
         /// <param name="e">
-        /// The event arguments.
+        /// 
         /// </param>
-        private void numericUpDownBufferSize_ValueChanged(object sender, EventArgs e) {
-            this._pm.BufferSize = (Int32)this.numericUpDownBufferSize.Value;
+        private void numericUpDownMaxHops_ValueChanged(object sender, EventArgs e) {
+            this._trm.MaxHops = (Int32)this.numericUpDownMaxHops.Value;
         }
 
         /// <summary>
         /// 
         /// </summary>
         /// <param name="sender">
-        /// The object sending the event call.
-        /// </param>
-        /// <param name="e">
-        /// The event arguments.
-        /// </param>
-        private void checkBoxNoFrag_CheckedChanged(object sender, EventArgs e) {
-            this._pm.DoNotFragment = this.checkBoxNoFrag.Checked;
-        }
-
-        /// <summary>
         /// 
-        /// </summary>
-        /// <param name="sender">
-        /// The object sending the event call.
         /// </param>
         /// <param name="e">
-        /// The event arguments.
+        /// 
         /// </param>
-        private void maskedTextBoxSrcAddr_TypeValidationCompleted(object sender, TypeValidationEventArgs e) {
-            this.errorProviderPing.SetError(this.maskedTextBoxSrcAddr, String.Empty);
+        private void maskedTextBoxSourceAddr_TypeValidationCompleted(object sender, TypeValidationEventArgs e) {
+            this.errorProviderTrace.SetError(this.maskedTextBoxSourceAddr, String.Empty);
             if (e.IsValidInput) {
-                this._pm.SourceAddress = (IPAddress)e.ReturnValue;
+                this._trm.SourceAddress = (IPAddress)e.ReturnValue;
             }
             else {
-                this.errorProviderPing.SetError(this.maskedTextBoxSrcAddr, e.Message);
-                this.maskedTextBoxSrcAddr.Select();
+                this.errorProviderTrace.SetError(this.maskedTextBoxSourceAddr, e.Message);
+                this.maskedTextBoxSourceAddr.Select();
                 e.Cancel = true;
             }
         }
@@ -926,54 +777,34 @@ namespace CyrusBuilt.CyNetTools
         /// 
         /// </summary>
         /// <param name="sender">
-        /// The object sending the event call.
+        /// 
         /// </param>
         /// <param name="e">
-        /// The event arguments.
+        /// 
         /// </param>
-        private void numericUpDownRecordHopCount_ValueChanged(object sender, EventArgs e) {
-            this._pm.RecordHopCount = (Int32)this.numericUpDownRecordHopCount.Value;
+        private void checkBoxNoResolve_CheckedChanged(object sender, EventArgs e) {
+            this._trm.DoNotResolveNames = this.checkBoxNoResolve.Checked;
         }
 
         /// <summary>
         /// 
         /// </summary>
         /// <param name="sender">
-        /// The object sending the event call.
-        /// </param>
-        /// <param name="e">
-        /// The event arguments.
-        /// </param>
-        private void checkBoxReverseRoute_CheckedChanged(object sender, EventArgs e) {
-            this._pm.TestReversRoute = this.checkBoxReverseRoute.Checked;
-        }
-
-        /// <summary>
         /// 
-        /// </summary>
-        /// <param name="sender">
-        /// The object sending the event call.
         /// </param>
         /// <param name="e">
-        /// The event arguments.
-        /// </param>
-        private void comboBoxSrcRouteMode_SelectedIndexChanged(object sender, EventArgs e) {
-            this._pm.SourceRouteMode = (RouteMode)this.comboBoxSrcRouteMode.SelectedIndex;
-            this.textBoxSrcRouteList.Enabled = (this._pm.SourceRouteMode != RouteMode.None);
-        }
-
-        /// <summary>
         /// 
-        /// </summary>
-        /// <param name="sender">
-        /// The object sending the event call.
         /// </param>
-        /// <param name="e">
-        /// The event arguments.
-        /// </param>
-        private void numericUpDownTimestamp_ValueChanged(object sender, EventArgs e) {
-            this._pm.TimestampCount = (Int32)this.numericUpDownTimestamp.Value;
+        private void FormTraceroute_Load(object sender, EventArgs e) {
+            this.SuspendLayout();
+            this.InitPrintDocument();
+            this.InitSaveFileDialog();
+            this.InitProtocolDropDown();
+            this.InitErrorProvider();
+            this.RegisterTraceEvents();
+            this.EnableProtocolSpecificControls();
+            this.textBoxTargetHost.Select();
+            this.ResumeLayout();
         }
-        #endregion
     }
 }

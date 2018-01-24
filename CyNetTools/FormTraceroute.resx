@@ -117,14 +117,14 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <metadata name="toolStripActions.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
+  <metadata name="statusStripStat.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
     <value>17, 17</value>
   </metadata>
-  <metadata name="pageSetupDialogTool.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
-    <value>112, 92</value>
+  <metadata name="toolStripActions.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
+    <value>246, 17</value>
   </metadata>
   <metadata name="printPreviewDialogTool.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
-    <value>326, 17</value>
+    <value>492, 17</value>
   </metadata>
   <assembly alias="System.Drawing" name="System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" />
   <data name="printPreviewDialogTool.Icon" type="System.Drawing.Icon, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
@@ -300,46 +300,43 @@
         wf+0BQAAgAUAAIAFAACAAQAAgAHB/4ABAACAAQAAgAEAALwBAAC8AQAAvAHB/4ABbP///5H/
 </value>
   </data>
-  <metadata name="printDialogTool.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
-    <value>515, 86</value>
-  </metadata>
-  <metadata name="saveFileDialogTool.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
-    <value>1820, 20</value>
-  </metadata>
-  <metadata name="statusStripStat.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
-    <value>786, 15</value>
-  </metadata>
   <metadata name="timerRuntime.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
-    <value>1150, 16</value>
+    <value>818, 17</value>
   </metadata>
-  <metadata name="errorProviderPing.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
-    <value>1461, 21</value>
-  </metadata>
-  <metadata name="$this.TrayHeight" type="System.Int32, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
-    <value>151</value>
+  <metadata name="errorProviderTrace.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
+    <value>1038, 17</value>
   </metadata>
   <data name="$this.Icon" type="System.Drawing.Icon, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
     <value>
         AAABAAEAEBAAAAEAIABoBAAAFgAAACgAAAAQAAAAIAAAAAEAIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
-        AAD///8A////AP///wCjo6OampqaTv///wD///8A////AP///wD///8A////AF9fX01aWlpKWlpaA///
-        /wD///8A////AP///wD///8Ara2tS6Ojo+Sampp8////AP///wD///8A////AGxsbIBlZWXAX19fRf//
-        /wD///8A////AP///wD///8A////AP///wCtra28o6Oj95qampz///8A////AH19faN0dHTzbGxsrv//
-        /wD///8A////AP///wD///8A////AP///wD///8Atra2MK2trf2jo6P+mpqaxJCQkMSGhob+fX199HR0
-        dCT///8A////AP///wD///8A////AP///wD///8A////AP///wC2traWra2t/Ofk4//l4uH/kJCQ/IaG
-        hof///8A////AP///wD///8A////AOCfam/emmZm3ZdfD////wD///8Av7+/Era2tvOtra3+o6Oj/pqa
-        muWQkJAM////AP///wD///8A1Xs4P9V7OFXipXXb5K6E/96davbdmWMG3ZZcPv///wC/v7+j2tnY/9vZ
-        2P+jo6Oi////ANV+PCzVfTkF1Xs45NmGSf/VezjV5auA+e3Fp//ipHX/4J9tCd+daP/dl2Pq0q2PPL+/
-        v/u2trb6vZ+ISNiGR+HXhEP/1YI9CdV/PP/jp3r/1Xs48+ayifnuyq3/5ap+/+OneAPionL246d3/96a
-        Zj/Hx8dOv7+/KtuPUz/dlV3/2IlK9teFRAPVgkD/46p9/9V9OfDotpHY7suu/+Wxif/lrYIJ46h7q+e1
-        jv/goXCq3p1qP92ZYz/dllyq4qV2/9qOU6vaiU0J2YlI/+Knev/Vgj/V6byZkOzHqf/qvZv/5rOLQuWu
-        hRvlq4De6LWP/+Srf//jp3r/5KyA/92XY97dlFsb25FWQt2XX//goG7/2IZHjevBny3rvpz87syw/+i4
-        lPzmto4f5rKJDOWug4Tlqn7G46d4xuKicoTgn2oM3ppmH92XX/zlrID/249T/NqLTir///8A7MOikO7J
-        rv/vyq3/6buX/Oi2kULmtYwJ////AP///wDjqHsJ4qV1QuChcPzlsIb/4qh6/92WXI3///8A////AOzE
-        pQbsxKS37squ//DNtP/rwqL/6LqV/+i2kf/ms4v/5a+G/+ezi//qu5n/5rGI/+CfbbfenGcG////AP//
-        /wD///8A////AOzEpXLsw6L2782x//HQuP/x07v/8NC5/+3Lrv/rwKD/5a6D9uWqfnL///8A////AP//
-        /wD///8A////AP///wD///8A7MSlJ+zEpY3sw6LM67+f/Ou+mvzpu5fM6LaRjea1jCf///8A////AP//
-        /wD///8A5+MAAOPHAADxjwAA8A8AAPgfAAAYHAAABCAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAgYEAAIAB
-        AADgBwAA8A8AAA==
+        AAD///8A////AP///wD///8ANoQ6UTOAN7cxfTTkL3oy9S96MvUvejLmA30i+gN7Hv8AeRUE////AP//
+        /wD///8A////AP///wBBlEcNPY9DtjqKP/ubxZ3/s8Kd/73BnP++w53/sNKx/wuINP9DoV//B3si8iV6
+        LRz///8A////AP///wBJoVINRptN0XC3hv+u6Mf/wNKg/yKXUf8ckUn/Fo9D/xCLO/86n17/gMGW/0aj
+        Yv8HfSL4JHosHv///wD///8ATqhXsXbAjf+Z17P/ecCA/7zCfv8pm1v/kMqp/43Ipf+KxqH/iMWe/2q2
+        hf+Cwpf/SKVm/wZ9I/UAeRsJVrRhRlOvXfu16tP/abx0/269cf++tm3/MZ9j/5TNrf9vuo7/a7iJ/2a2
+        hf9hs4D/Z7WC/4PCmP88oFz/AH8l+1q6ZrKS16//oN60/4TGcP+o0ID/xaVc/zeja/+WzrD/lM2t/5HL
+        qv+Qy6j/dLyQ/4rHof9GpWj/CYg3/y96Mr9ev2rksOnP/4PUkP+/3Ir/w8uC/8yiVv89pW//OqNt/zWh
+        Z/8xnWH/Va98/5HLqv9Pq3T/GI9G/6HYvP8vejLoYMNt9r7v3f9z0X3/kNFs/7zgnv/Hp17/07Be/8aZ
+        U//GvG7/r9F6/zuiZP9as4H/KJhX/1qjZ/+x487/MX4192HEbvW+8Nz/gdiD/3fbbf+/5Zr/zN+n/8qo
+        Xf/CvWz/uNqL/6bYYP88p2j/MZ9l/1m8UP9jq2z/suTO/zWCOfZhxG7is+zS/5viov+d6o3/1O23/9Dq
+        x//PuW7/zLFm/8vJdf9222f/ZtlN/2XXTf9s013/c7t+/6Xbwv85iD7mYcRurZjetf+168z/se+n/8nu
+        qf/R6sn/1c+N/9nLi//NtGb/vLxn/5rWcf+C3nP/etxx/5HQo/+IyKT/PY9DuWHEbjxhxG76wPPi/7Xv
+        tP+18Kz/we23/9Tjt//Z2Jz/2tOV/821bf/Hs23/tcuE/5Tfmv+v583/RptN/EKWSU////8AYcRupYfX
+        oP/A8t7/x/LW/9Xv1f/Q6c//1dum/9zeq//bzZD/18iL/8nBjv+91a//eseR/0qjU7b///8A////AGHE
+        bgVhxG7EjNii/8316P/U7dr/zu3T/8/fr//W3rX/1NSi/87Qof/E0Kr/h8mR/1OvXdFPqlkP////AP//
+        /wD///8AYcRuBGHEbqRhxG74peG7/7rqzP/F4L7/xdq0/73XsP+m16z/Xb5p+1q6ZrZXtmIM////AP//
+        /wD///8A////AP///wD///8AYcRuPWHEbqphxG7fYcRu9GHEbvhhxG7pYcRusmDCbUj///8A////AP//
+        /wD///8A8AcAAMADAACAAQAAgAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAgAEAAIAB
+        AADAAwAA8A8AAA==
 </value>
   </data>
+  <metadata name="saveFileDialogTool.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
+    <value>1312, 17</value>
+  </metadata>
+  <metadata name="pageSetupDialogTool.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
+    <value>1587, 17</value>
+  </metadata>
+  <metadata name="printDialogTool.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
+    <value>1895, 17</value>
+  </metadata>
 </root>
