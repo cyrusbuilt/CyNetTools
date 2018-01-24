@@ -275,7 +275,7 @@ namespace CyrusBuilt.CyNetTools.Core.TraceRoute
                     if ((this._hostList.Contains(",")) ||
                         (this._hostList.Contains("\\")) ||
                         (this._hostList.Contains("/"))) {
-                        // TODO invalid host delimiter.
+                        throw new InvalidOperationException("TraceRouteModule.HostList can only be delimited by spaces.");
                     }
 
                     String[] hosts = this._hostList.Split(' ');
@@ -313,7 +313,7 @@ namespace CyrusBuilt.CyNetTools.Core.TraceRoute
             }
 
             // Combine arguments with target if specified. BETTER BE!
-            if (String.IsNullOrEmpty(this._hostList)) {
+            if (String.IsNullOrEmpty(this._target)) {
                 throw new InvalidOperationException("Target host not specified.");
             }
             else {
@@ -337,7 +337,7 @@ namespace CyrusBuilt.CyNetTools.Core.TraceRoute
             }
 
             // Setup remaining start parameters.
-            this._startInfo.UseShellExecute = true;
+            this._startInfo.UseShellExecute = false;
             this._startInfo.RedirectStandardError = false;
             this._startInfo.RedirectStandardInput = false;
             this._startInfo.RedirectStandardOutput = true;
@@ -412,7 +412,7 @@ namespace CyrusBuilt.CyNetTools.Core.TraceRoute
                     }
                 }
             }
-            catch (InvalidOperationException) {
+            catch (InvalidOperationException ex) {
                 // This will occur if the Cancel() or Dispose() methods are called,
                 // since this is expected to occur under these conditions, then just
                 // raise the ProcessCancelled event.

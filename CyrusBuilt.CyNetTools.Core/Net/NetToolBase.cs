@@ -17,7 +17,7 @@ namespace CyrusBuilt.CyNetTools.Core.Net
         /// </summary>
         protected NetToolBase()
             : base() {
-                String execPath = Path.Combine(Environment.SystemDirectory, "net.exe");
+                var execPath = Path.Combine(Environment.SystemDirectory, "net.exe");
                 this._exec = new FileInfo(execPath);
         }
 
