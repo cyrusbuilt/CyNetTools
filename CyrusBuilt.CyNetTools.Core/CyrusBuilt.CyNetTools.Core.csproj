@@ -49,6 +49,9 @@
     <Compile Include="Arp\ArpUtils.cs" />
     <Compile Include="EventHandlerDelegates.cs" />
     <Compile Include="ExternalToolBase.cs" />
+    <Compile Include="GetMac\GetMacModule.cs" />
+    <Compile Include="GetMac\GetMacOutputFormat.cs" />
+    <Compile Include="GetMac\GetMacUtils.cs" />
     <Compile Include="IExternalTool.cs" />
     <Compile Include="IPConfig\IpConfigCommand.cs" />
     <Compile Include="IPConfig\IPConfigModule.cs" />
@@ -77,7 +80,6 @@
     <Compile Include="TraceRoute\TraceRouteModule.cs" />
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="GetMac\" />
     <Folder Include="NsLookup\" />
     <Folder Include="Pathping\" />
     <Folder Include="RPCPing\" />

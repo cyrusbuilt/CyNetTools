@@ -1,14 +1,9 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
 using System.Drawing;
 using System.Drawing.Printing;
 using System.IO;
 using System.Net;
 using System.Security;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 using CyrusBuilt.CyNetTools.Core;
 using CyrusBuilt.CyNetTools.Core.TraceRoute;
@@ -16,7 +11,7 @@ using CyrusBuilt.CyNetTools.Core.TraceRoute;
 namespace CyrusBuilt.CyNetTools
 {
     /// <summary>
-    /// 
+    /// The UI form for the tracert tool.
     /// </summary>
     public partial class FormTraceroute : Form
     {
@@ -32,10 +27,11 @@ namespace CyrusBuilt.CyNetTools
 
         #region Constructors
         /// <summary>
-        /// 
+        /// Initializes a new instance of the <see cref="CyrusBuilt.CyNetTools.FormTraceroute"/>
+        /// class. This is the default constructor.
         /// </summary>
         /// <param name="mdiParent">
-        /// 
+        /// The form that is the MDI parent of this form.
         /// </param>
         public FormTraceroute(Form mdiParent) {
             this.InitializeComponent();
@@ -369,6 +365,7 @@ namespace CyrusBuilt.CyNetTools
         }
         #endregion
 
+        #region Event Handlers
         /// <summary>
         /// Handles the end-of-printing event. This simply closes the text stream.
         /// </summary>
@@ -630,26 +627,29 @@ namespace CyrusBuilt.CyNetTools
         }
 
         /// <summary>
-        /// 
+        /// Handles the output received from the Traceroute Module. This simply
+        /// writes the output to the console textbox.
         /// </summary>
         /// <param name="sender">
-        /// 
+        /// The object sending the event call.
         /// </param>
         /// <param name="e">
-        /// 
+        /// The event arguments.
         /// </param>
         private void Trm_OutputReceived(object sender, ProcessOutputEventArgs e) {
             this.SafeWriteConsole(e.StandardOutput);
         }
 
         /// <summary>
-        /// 
+        /// Handles the process cancelled event from the Traceroute Module. This
+        /// reverts the controls states back to their defaults and reports any
+        /// errors that may have caused the cancellation.
         /// </summary>
         /// <param name="sender">
-        /// 
+        /// The object sending the event call.
         /// </param>
         /// <param name="e">
-        /// 
+        /// The event arguments.
         /// </param>
         private void Trm_ProcessCancelled(object sender, ProcessCancelledEventArgs e) {
             this.SafeToggleStatusAnim(false);
@@ -663,13 +663,14 @@ namespace CyrusBuilt.CyNetTools
         }
 
         /// <summary>
-        /// 
+        /// Handles the process finished event from the Traceroute module. This
+        /// reverts the controls back to their default states.
         /// </summary>
         /// <param name="sender">
-        /// 
+        /// The object sending the event call.
         /// </param>
         /// <param name="e">
-        /// 
+        /// The event arguments.
         /// </param>
         private void Trm_ProcessFinished(object sender, ProccessDoneEventArgs e) {
             this.SafeToggleStatusAnim(false);
@@ -681,13 +682,15 @@ namespace CyrusBuilt.CyNetTools
         }
 
         /// <summary>
-        /// 
+        /// Handles the process started event from the Traceroute module. This
+        /// updates the appropriate controls the notify the user of the process
+        /// start up.
         /// </summary>
         /// <param name="sender">
-        /// 
+        /// The object sending the event call.
         /// </param>
         /// <param name="e">
-        /// 
+        /// The event arguments.
         /// </param>
         private void Trm_ProcessStarted(object sender, ProcessStartedEventArgs e) {
             this.SafeToggleStatusAnim(true);
@@ -699,13 +702,14 @@ namespace CyrusBuilt.CyNetTools
         }
 
         /// <summary>
-        /// 
+        /// Handles the progress event from the Traceroute Module. This reports
+        /// the module's progress.
         /// </summary>
         /// <param name="sender">
-        /// 
+        /// The object sending the event call.
         /// </param>
         /// <param name="e">
-        /// 
+        /// The event arguments.
         /// </param>
         private void Trm_Progress(object sender, TraceProgressEventArgs e) {
             this.SafeSetProgressBarValue(e.Progress);
@@ -714,52 +718,61 @@ namespace CyrusBuilt.CyNetTools
         }
 
         /// <summary>
-        /// 
+        /// Handles the selection change event from the protocol drop-down.
+        /// This will enable/disable the appropriate protocol-specific controls
+        /// based on the selected item.
         /// </summary>
         /// <param name="sender">
-        /// 
+        /// The object sending the event call.
         /// </param>
         /// <param name="e">
-        /// 
+        /// The event arguments.
         /// </param>
         private void comboBoxProtocol_SelectedIndexChanged(object sender, EventArgs e) {
             this.EnableProtocolSpecificControls();
         }
 
         /// <summary>
-        /// 
+        /// Handles the round-trip check box clicked event. This updates the
+        /// appropriate property in the Traceroute Module to reflect the
+        /// checked state.
         /// </summary>
         /// <param name="sender">
-        /// 
+        /// The object sending the event call.
         /// </param>
         /// <param name="e">
-        /// 
+        /// The event arguments.
         /// </param>
         private void checkBoxRoundTrip_CheckedChanged(object sender, EventArgs e) {
             this._trm.RoundTrip = this.checkBoxRoundTrip.Checked;
         }
 
         /// <summary>
-        /// 
+        /// Handles the value changed event from the max hops numeric selector.
+        /// This updates the max hops property in the Traceroute Module to
+        /// reflect the specified value.
         /// </summary>
         /// <param name="sender">
-        /// 
+        /// The object sending the event call.
         /// </param>
         /// <param name="e">
-        /// 
+        /// The event arguments.
         /// </param>
         private void numericUpDownMaxHops_ValueChanged(object sender, EventArgs e) {
             this._trm.MaxHops = (Int32)this.numericUpDownMaxHops.Value;
         }
 
         /// <summary>
-        /// 
+        /// Handles the text validation event from the source address masked
+        /// textbox. This will update the source address property in the
+        /// Traceroute Module with the user-specified value if valid; Otherwise,
+        /// will indicate the error condition on the field to the user.
         /// </summary>
         /// <param name="sender">
-        /// 
+        /// The object sending the event call.
         /// </param>
         /// <param name="e">
-        /// 
+        /// The event arguments.
         /// </param>
         private void maskedTextBoxSourceAddr_TypeValidationCompleted(object sender, TypeValidationEventArgs e) {
             this.errorProviderTrace.SetError(this.maskedTextBoxSourceAddr, String.Empty);
@@ -774,26 +787,29 @@ namespace CyrusBuilt.CyNetTools
         }
 
         /// <summary>
-        /// 
+        /// Handles the "do not resolve names" checkbox click event.
+        /// This will update the DoNoResolveNames property in the Traceroute
+        /// Module to reflect the checked state.
         /// </summary>
         /// <param name="sender">
-        /// 
+        /// The object sending the event call.
         /// </param>
         /// <param name="e">
-        /// 
+        /// The event arguments.
         /// </param>
         private void checkBoxNoResolve_CheckedChanged(object sender, EventArgs e) {
             this._trm.DoNotResolveNames = this.checkBoxNoResolve.Checked;
         }
 
         /// <summary>
-        /// 
+        /// Handles the for load event. This will perform additional control
+        /// state initialization.
         /// </summary>
         /// <param name="sender">
-        /// 
+        /// The object sending the event call.
         /// </param>
         /// <param name="e">
-        /// 
+        /// The event arguments.
         /// </param>
         private void FormTraceroute_Load(object sender, EventArgs e) {
             this.SuspendLayout();
@@ -806,5 +822,6 @@ namespace CyrusBuilt.CyNetTools
             this.textBoxTargetHost.Select();
             this.ResumeLayout();
         }
+        #endregion
     }
 }
