@@ -296,6 +296,7 @@ namespace CyrusBuilt.CyNetTools.Core.GetMac
         }
 
         /// <summary>
+        /// Launches the getmac process on a separate thread.
         /// </summary>
         /// <exception cref="InvalidOperationException">
         /// Remote host specified without remote user credentials.
@@ -317,6 +318,7 @@ namespace CyrusBuilt.CyNetTools.Core.GetMac
         }
 
         /// <summary>
+        /// Cancels the current getmac if it is running. This will attempt to
         /// gracefully terminate the process first, and then force-kill the
         /// process if graceful termination fails.
         /// </summary>
