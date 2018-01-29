@@ -27,7 +27,7 @@ namespace CyrusBuilt.CyNetTools
 
         #region Constructors
         /// <summary>
-        /// Initializes a new instance of the <see cref="CyrusBuilt.CyNetTools.FormPinge"/>
+        /// Initializes a new instance of the <see cref="CyrusBuilt.CyNetTools.FormPing"/>
         /// class. This is the default constructor.
         /// </summary>
         /// <param name="mdiParent">

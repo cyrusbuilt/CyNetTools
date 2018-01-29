@@ -44,6 +44,8 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="GetMac\GetMacModuleTests.cs" />
+    <Compile Include="GetMac\GetMacUtilsTests.cs" />
     <Compile Include="NetworkUtilsTests.cs" />
     <Compile Include="ProcessCancelledEventArgsTests.cs" />
     <Compile Include="ProcessDoneEventArgsTests.cs" />
