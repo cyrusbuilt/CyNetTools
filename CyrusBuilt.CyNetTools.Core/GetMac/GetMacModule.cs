@@ -302,7 +302,7 @@ namespace CyrusBuilt.CyNetTools.Core.GetMac
         /// Remote host specified without remote user credentials.
         /// </exception>
         /// <exception cref="FileNotFoundException">
-        /// The ping executable could not be found.
+        /// The getmac executable could not be found.
         /// </exception>
         public override void Start() {
             if (base.IsRunning) {

@@ -6,12 +6,12 @@ using System.Net;
 using System.Text.RegularExpressions;
 using System.Threading;
 
-namespace CyrusBuilt.CyNetTools.Core.TraceRoute
+namespace CyrusBuilt.CyNetTools.Core.Pathping
 {
     /// <summary>
-    /// A threaded wrapper for the Microsoft tracert utility.
+    /// Provides a threaded wrapper for the Microsoft Pathping utility.
     /// </summary>
-    public class TraceRouteModule : ExternalToolBase
+    public class PathpingModule : ExternalToolBase
     {
         #region Constants
         /// <summary>
@@ -21,43 +21,29 @@ namespace CyrusBuilt.CyNetTools.Core.TraceRoute
         #endregion
 
         #region Fields
-        private Process _traceProc = null;
-        private ProcessStartInfo _startInfo = null;
-        private Thread _traceMonitor = null;
-        private Boolean _noResolve = false;
-        private Boolean _roundTrip = false;
+        private Process _pathpingProc = null;
+        private Thread _procReader = null;
+        private FileInfo _exec = null;
+        private Boolean _resolveNames = true;
+        private IPVersion _ipVer = IPVersion.IPv4;
         private Int32 _maxHops = 0;
         private Int32 _timeout = 0;
+        private Int32 _wait = 0;
+        private Int32 _queriesPerHop = 0;
         private String _hostList = String.Empty;
-        private String _target = String.Empty;
+        private String _targetHost = String.Empty;
         private IPAddress _srcAddress = IPAddress.None;
-        private IPVersion _ipVer = IPVersion.IPv4;
-        private FileInfo _exec = null;
-        private Regex _reReply = null;
         private static readonly Object _flagLock = new Object();
-        #endregion
-
-        #region Events
-        /// <summary>
-        /// Occurs when trace progress is made.
-        /// </summary>
-        public event TraceProgressEventHandler Progress;
         #endregion
 
         #region Constructors and Destructors
         /// <summary>
-        /// Initializes a new instance of the <b>CyrusBuilt.CyNetTools.Core.TraceRoute.TraceRouteModule</b>
+        /// Initializes a new instance of the <b>CyrusBuilt.CyNetTools.Core.TraceRoute.PathpingModule</b>
         /// class. This is the default constructor.
         /// </summary>
-        public TraceRouteModule()
-            : base() {
-                var execPath = Path.Combine(Environment.SystemDirectory, "tracert.exe");
-                this._exec = new FileInfo(execPath);
-                this._reReply = new Regex(".+\\d.+ms.+\\d.+ms.+\\d.+ms.+",
-                                            RegexOptions.IgnoreCase |
-                                            RegexOptions.IgnorePatternWhitespace |
-                                            RegexOptions.CultureInvariant |
-                                            RegexOptions.Compiled);
+        public PathpingModule() : base() {
+            var execPath = Path.Combine(Environment.SystemDirectory, "pathping.exe");
+            this._exec = new FileInfo(execPath);
         }
 
         /// <summary>
@@ -66,13 +52,11 @@ namespace CyrusBuilt.CyNetTools.Core.TraceRoute
         /// <param name="disposing">
         /// Set true if disposing all managed resources.
         /// </param>
-        protected void Dispose(Boolean disposing) {
+        protected void Dispose(bool disposing) {
             if (disposing) {
-                if (this._traceProc != null) {
+                if (this._pathpingProc != null) {
                     try {
-                        if (!this._traceProc.HasExited) {
-                            this._traceProc.Kill();
-                        }
+                        this._pathpingProc.Kill();
                     }
                     catch (InvalidOperationException) {
                         // This exception will be throw by Kill() if
@@ -86,28 +70,29 @@ namespace CyrusBuilt.CyNetTools.Core.TraceRoute
                         // Do NOT throw exceptions from dispose.
                     }
                     finally {
-                        this._traceProc.Close();
-                        this._traceProc.Dispose();
-                        this._traceProc = null;
+                        this._pathpingProc.Dispose();
+                        this._pathpingProc = null;
                     }
                 }
             }
 
-            if (this._traceMonitor != null) {
-                try {
-                    if (this._traceMonitor.IsAlive) {
-                        this._traceMonitor.Abort();
+            if (this._procReader != null) {
+                base.Cancel();
+                Thread.Sleep(50);
+                if (this._procReader.IsAlive) {
+                    try {
+                        this._procReader.Abort();
+                    }
+                    catch (ThreadAbortException) {
+                        Thread.ResetAbort();
                     }
                 }
-                catch (ThreadAbortException) {
-                }
-                this._traceMonitor = null;
+
+                this._procReader = null;
             }
 
-            this._startInfo = null;
-            this._reReply = null;
+            this._isRunning = false;
             this._exec = null;
-            base._isRunning = false;
             base.Dispose();
         }
 
@@ -122,19 +107,19 @@ namespace CyrusBuilt.CyNetTools.Core.TraceRoute
         /// <summary>
         /// Destructor.
         /// </summary>
-        ~TraceRouteModule() {
+        ~PathpingModule() {
             this.Dispose(false);
         }
         #endregion
 
         #region Properties
         /// <summary>
-        /// Gets whether or not to disable performing name resolution on the
+        /// Gets whether or not to performing name resolution on the
         /// target and each node in between. Default is false.
         /// </summary>
-        public Boolean DoNotResolveNames {
-            get { return this._noResolve; }
-            set { this._noResolve = value; }
+        public Boolean ResolveHostNames {
+            get { return this._resolveNames; }
+            set { this._resolveNames = value; }
         }
 
         /// <summary>
@@ -147,6 +132,7 @@ namespace CyrusBuilt.CyNetTools.Core.TraceRoute
                 if (value < 0) {
                     value = DEFAULT_HOP_COUNT;
                 }
+
                 this._maxHops = value;
             }
         }
@@ -175,8 +161,7 @@ namespace CyrusBuilt.CyNetTools.Core.TraceRoute
 
         /// <summary>
         /// Gets or sets the space-delimited list of hosts source the route along.
-        /// Default is an empty string (disabled). Ignored unless <see cref="IPProtocolVersion"/>
-        /// is <see cref="IPVersion.IPv4"/>.
+        /// Default is an empty string (disabled).
         /// </summary>
         public String HostList {
             get { return this._hostList; }
@@ -189,18 +174,7 @@ namespace CyrusBuilt.CyNetTools.Core.TraceRoute
         }
 
         /// <summary>
-        /// Gets or sets whether or not to trace round-trip path. Ignored unless
-        /// <see cref="IPProtocolVersion"/> is <see cref="IPVersion.IPv6"/>.
-        /// Default is false;
-        /// </summary>
-        public Boolean RoundTrip {
-            get { return this._roundTrip; }
-            set { this._roundTrip = value; }
-        }
-
-        /// <summary>
         /// Gets or sets the source address to use. Default is <see cref="IPAddress.None"/>.
-        /// Ignored unless <see cref="IPProtocolVersion"/> is <see cref="IPVersion.IPv6"/>.
         /// </summary>
         public IPAddress SourceAddress {
             get { return this._srcAddress; }
@@ -211,40 +185,50 @@ namespace CyrusBuilt.CyNetTools.Core.TraceRoute
         /// Gets or sets the target hostname or IP address to trace.
         /// </summary>
         public String TargetHost {
-            get { return this._target; }
+            get { return this._targetHost; }
             set {
                 if (value == null) {
                     value = String.Empty;
                 }
-                this._target = value;
+                this._targetHost = value;
             }
+        }
+
+        /// <summary>
+        /// Gets or sets the number of queries per hop.
+        /// </summary>
+        public Int32 QueriesPerHop {
+            get { return this._queriesPerHop; }
+            set {
+                if (value < 0) {
+                    value = 0;
+                }
+
+                this._queriesPerHop = value;
+            }
+        }
+
+        /// <summary>
+        /// Gets or sets the amount of time to wait (in milliseconds) between replies.
+        /// </summary>
+        public Int32 Wait {
+            get { return this._wait; }
+            set { this._wait = value; }
         }
         #endregion
 
         #region Methods
         /// <summary>
-        /// Raises the <see cref="Progress"/> event.
-        /// </summary>
-        /// <param name="e">
-        /// The event arguments.
-        /// </param>
-        protected virtual void OnProgress(TraceProgressEventArgs e) {
-            if (this.Progress != null) {
-                this.Progress(this, e);
-            }
-        }
-
-        /// <summary>
-        /// Performs any neccessary preflight work prior to tracert execution.
+        /// Performs any neccessary preflight work prior to pathping execution.
         /// This method is intended to validate parameters and input and throw
         /// the appropriate exception if any invalid parameter values are
         /// detected or if the instance instance is in an invalid state.
         /// </summary>
         /// <exception cref="InvalidOperationException">
-        /// Target host not specified.
+        /// Hostlist cannot be delimited by anything other than spaces.
         /// </exception>
         /// <exception cref="FileNotFoundException">
-        /// The tracert executable could not be found.
+        /// The pathping executable could not be found.
         /// </exception>
         protected override void Preflight() {
             base._exitCode = 0;
@@ -255,98 +239,104 @@ namespace CyrusBuilt.CyNetTools.Core.TraceRoute
 
             // Name resolution
             var args = String.Empty;
-            if (this._noResolve) {
-                args += " -d";
+            if (!this._resolveNames) {
+                args += " -n";
             }
 
-            // Maximum hop count.
+            // Max hops
             if (this._maxHops > 0) {
                 args += " -h " + this._maxHops.ToString();
             }
 
-            // Timeout milliseconds.
+            // Timeout
             if (this._timeout > 0) {
                 args += " -w " + this._timeout.ToString();
             }
 
-            if (this._ipVer == IPVersion.IPv4) {
-                // Loose host list.
-                if (!String.IsNullOrEmpty(this._hostList)) {
-                    if ((this._hostList.Contains(",")) ||
+            // IP Protocol
+            switch (this._ipVer) {
+                case IPVersion.IPv4:
+                    args += " -4";
+                    break;
+                case IPVersion.IPv6:
+                    args += " -6";
+                    break;
+            }
+
+            // Host list
+            if (!String.IsNullOrEmpty(this._hostList)) {
+                if ((this._hostList.Contains(",")) ||
                         (this._hostList.Contains("\\")) ||
                         (this._hostList.Contains("/"))) {
-                        throw new InvalidOperationException("TraceRouteModule.HostList can only be delimited by spaces.");
+                    throw new InvalidOperationException("PathpingModule.HostList can only be delimited by spaces.");
+                }
+
+                String[] hosts = this._hostList.Split(' ');
+                if (hosts.Length > 0) {
+                    // List is valid. We reconstruct clean here (eliminate
+                    // extra spaces, if any).
+                    var newHostList = String.Empty;
+                    foreach (var h in hosts) {
+                        newHostList += h + " ";
                     }
 
-                    String[] hosts = this._hostList.Split(' ');
-                    if (hosts.Length > 0) {
-                        // List is valid. We reconstruct clean here (eliminate
-                        // extra spaces, if any).
-                        var newHostList = String.Empty;
-                        foreach (var h in hosts) {
-                            newHostList += h + " ";
-                        }
+                    // Strip trailing space if present (likely).
+                    if (newHostList.EndsWith(" ")) {
+                        newHostList = newHostList.TrimEnd(' ');
+                    }
 
-                        // Strip trailing space if present (likely).
-                        if (newHostList.EndsWith(" ")) {
-                            newHostList = newHostList.TrimEnd(' ');
-                        }
-
-                        this._hostList = newHostList;
-                        Array.Clear(hosts, 0, hosts.Length);
-                        if (!String.IsNullOrEmpty(this._hostList)) {
-                            args += " -j " + this._hostList;
-                        }
+                    this._hostList = newHostList;
+                    Array.Clear(hosts, 0, hosts.Length);
+                    if (!String.IsNullOrEmpty(this._hostList)) {
+                        args += " -g " + this._hostList;
                     }
                 }
             }
-            else if (this._ipVer == IPVersion.IPv6) {
-                // Round-trip.
-                if (this._roundTrip) {
-                    args += " -R";
-                }
 
-                // Source address.
-                if (this._srcAddress != IPAddress.None) {
-                    args += " -S " + this._srcAddress.ToString();
-                }
+            // Source address
+            if (this._srcAddress != null && this._srcAddress != IPAddress.None) {
+                args += " -i " + this._srcAddress.ToString();
+            }
+
+            // Queries-per-hop
+            if (this._queriesPerHop > 0) {
+                args += " -q " + this._queriesPerHop.ToString();
+            }
+
+            // Wait period
+            if (this._wait > 0) {
+                args += " -p " + this._wait.ToString();
             }
 
             // Combine arguments with target if specified. BETTER BE!
-            if (String.IsNullOrEmpty(this._target)) {
+            if (String.IsNullOrEmpty(this._targetHost)) {
                 throw new InvalidOperationException("Target host not specified.");
             }
-            else {
-                args += " " + this._target;
+
+            args += " " + this._targetHost;
+
+            // Destroy previous process object (if present).
+            if (this._pathpingProc != null) {
+                this._pathpingProc.Dispose();
             }
 
             // Validate exec path.
-            this._startInfo = new ProcessStartInfo();
+            this._pathpingProc = new Process();
             if (this._exec.Exists) {
-                this._startInfo.FileName = this._exec.FullName;
-                this._startInfo.WorkingDirectory = this._exec.DirectoryName;
+                this._pathpingProc.StartInfo.FileName = this._exec.FullName;
+                this._pathpingProc.StartInfo.WorkingDirectory = this._exec.DirectoryName;
             }
             else {
-                throw new FileNotFoundException("Tracert executable not found.", this._exec.FullName);
-            }
-
-            // Destroy previous process object (if present).
-            if (this._traceProc != null) {
-                this._traceProc.Close();
-                this._traceProc.Dispose();
+                throw new FileNotFoundException("Pathping executable not found.", this._exec.FullName);
             }
 
             // Setup remaining start parameters.
-            this._startInfo.UseShellExecute = false;
-            this._startInfo.RedirectStandardError = false;
-            this._startInfo.RedirectStandardInput = false;
-            this._startInfo.RedirectStandardOutput = true;
-            this._startInfo.CreateNoWindow = true;
-            this._startInfo.Arguments = args;
-
-            // Setup the process.
-            this._traceProc = new Process();
-            this._traceProc.StartInfo = this._startInfo;
+            this._pathpingProc.StartInfo.UseShellExecute = false;
+            this._pathpingProc.StartInfo.RedirectStandardError = false;
+            this._pathpingProc.StartInfo.RedirectStandardInput = false;
+            this._pathpingProc.StartInfo.RedirectStandardOutput = true;
+            this._pathpingProc.StartInfo.CreateNoWindow = true;
+            this._pathpingProc.StartInfo.Arguments = args;
         }
 
         /// <summary>
@@ -354,57 +344,39 @@ namespace CyrusBuilt.CyNetTools.Core.TraceRoute
         /// execute in the reader thread.
         /// </summary>
         protected override void ProcessReader() {
+            ProcessOutputEventArgs outArgs = null;
+            var output = String.Empty;
             var errMsg = String.Empty;
-            try {
-                Match mReply = null;
-                var hop = 0;
-                var count = this._maxHops;
-                if (count <= 0) {
-                    count = DEFAULT_HOP_COUNT;
-                }
 
+            try {
                 // Start the process and raise the running event.
-                this._traceProc.Start();
-                base.OnProcessStarted(new ProcessStartedEventArgs(this._traceProc.Id));
+                this._pathpingProc.Start();
+                base.OnProcessStarted(new ProcessStartedEventArgs(this._pathpingProc.Id));
+
+                // TODO Compute progress like we did in TraceRouteModule? Will need regex.
 
                 // Read the output until the process terminates.
-                var output = this._traceProc.StandardOutput.ReadLine();
-                while ((!base.WasCancelled) && (output != null)) {
+                output = this._pathpingProc.StandardOutput.ReadLine();
+                while (output != null && !base.WasCancelled) {
                     // Notify output listeners.
-                    base.OnOutputReceived(new ProcessOutputEventArgs(output));
+                    outArgs = new ProcessOutputEventArgs(output);
+                    base.OnOutputReceived(outArgs);
 
-                    // See if the output message is a tracert reply.
-                    mReply = this._reReply.Match(output);
-                    if (mReply.Success) {
-                        hop++;
-                        this.OnProgress(new TraceProgressEventArgs(hop, count));
-                    }
-
-                    // This is blocking, which is why we use a thread.
-                    output = this._traceProc.StandardOutput.ReadLine();
+                    // This loop is blocking, which is why we are using a thread.
+                    output = this._pathpingProc.StandardOutput.ReadLine();
                 }
 
                 // Wait for the process to finish up, then get the exit code.
-                this._traceProc.WaitForExit();
-                base._exitCode = this._traceProc.ExitCode;
+                this._pathpingProc.WaitForExit();
+                base._exitCode = this._pathpingProc.ExitCode;
 
-                // If somehow the total count is greater than the last hop
-                // number, then set the count equal to the last hop number,
-                // set the completed percentage to 100, and raise the progress
-                // event.  This should prevent an exception if the numbers are
-                // wrong.
-                if (count > hop) {
-                    count = hop;
-                    this.OnProgress(new TraceProgressEventArgs(hop, count));
-                }
-
-                // If the complete percentage is 100% or the process exit was 0,
-                // the process completed.
-                if ((((hop * 100) / count) == 100) || (base.ExitCode == 0)) {
-                    base.OnProcessFinished(new ProccessDoneEventArgs(base.ExitCode));
+                // If the process terminated normally, then notify listeners that
+                // we're done. Otherwise, notify output and cancellation listeners.
+                if (base._exitCode == 0) {
+                    base.OnProcessFinished(new ProccessDoneEventArgs(base._exitCode));
                 }
                 else {
-                    errMsg = "Trace process failed. Exit code: " + base.ExitCode.ToString();
+                    errMsg = "A pathping error occurred. Error code: " + base._exitCode.ToString();
                     base.OnOutputReceived(new ProcessOutputEventArgs(errMsg));
                     base.OnProcessCancelled(ProcessCancelledEventArgs.Empty);
                     lock (_flagLock) {
@@ -423,7 +395,8 @@ namespace CyrusBuilt.CyNetTools.Core.TraceRoute
             }
             catch (Exception ex) {
                 errMsg = "An error occurred while reading process output: " + ex.ToString();
-                base.OnOutputReceived(new ProcessOutputEventArgs(errMsg));
+                outArgs = new ProcessOutputEventArgs(errMsg);
+                base.OnOutputReceived(outArgs);
                 base.OnProcessCancelled(new ProcessCancelledEventArgs(ex));
                 lock (_flagLock) {
                     base._wasCancelled = true;
@@ -431,7 +404,10 @@ namespace CyrusBuilt.CyNetTools.Core.TraceRoute
             }
             finally {
                 // Destroy the process and update the state flag.
-                this._traceProc.Close();
+                if (this._pathpingProc != null) {
+                    this._pathpingProc.Dispose();
+                }
+
                 lock (_flagLock) {
                     base._isRunning = false;
                 }
@@ -439,29 +415,29 @@ namespace CyrusBuilt.CyNetTools.Core.TraceRoute
         }
 
         /// <summary>
-        /// Launches the net process on a separate thread.
+        /// Launches the pathping process on a separate thread.
         /// </summary>
         /// <exception cref="InvalidOperationException">
-        /// Target host not specified.
+        /// Hostlist cannot be delimited by anything other than spaces.
         /// </exception>
         /// <exception cref="FileNotFoundException">
-        /// The tracert executable could not be found.
+        /// The pathping executable could not be found.
         /// </exception>
         public override void Start() {
-            if (base._isRunning) {
+            if (base.IsRunning) {
                 return;
             }
 
             this.Preflight();
-            this._traceMonitor = new Thread(new ThreadStart(this.ProcessReader));
-            this._traceMonitor.IsBackground = true;
-            this._traceMonitor.Name = "tracertMonitor";
-            this._traceMonitor.Start();
+            this._procReader = new Thread(new ThreadStart(this.ProcessReader));
+            this._procReader.IsBackground = true;
+            this._procReader.Name = "pathpingReader";
+            this._procReader.Start();
             base.Start();
         }
 
         /// <summary>
-        /// Cancels the current tracert if it is running. This will attempt to
+        /// Cancels the current pathping if it is running. This will attempt to
         /// gracefully terminate the process first, and then force-kill the
         /// process if graceful termination fails.
         /// </summary>
@@ -470,15 +446,15 @@ namespace CyrusBuilt.CyNetTools.Core.TraceRoute
         /// </exception>
         public override void Cancel() {
             if ((!base.WasCancelled) || (base.IsRunning)) {
-                if (this._traceProc != null) {
+                if (this._pathpingProc != null) {
                     try {
                         // Try to do this gracefully first.
                         base.Cancel();
                         Thread.Sleep(1000);
 
                         // Force terminate.
-                        if (!this._traceProc.HasExited) {
-                            this._traceProc.Kill();
+                        if (!this._pathpingProc.HasExited) {
+                            this._pathpingProc.Kill();
                         }
                     }
                     catch (InvalidOperationException) {
@@ -494,7 +470,7 @@ namespace CyrusBuilt.CyNetTools.Core.TraceRoute
                         throw;
                     }
                     finally {
-                        this._traceProc.Close();
+                        this._pathpingProc.Close();
                     }
                 }
             }
