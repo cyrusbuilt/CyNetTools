@@ -64,6 +64,7 @@
     <Compile Include="NetworkUtils.cs" />
     <Compile Include="Net\NetToolBase.cs" />
     <Compile Include="Net\NetViewModule.cs" />
+    <Compile Include="Pathping\PathpingModule.cs" />
     <Compile Include="Ping\PingErrorCodes.cs" />
     <Compile Include="Ping\PingEventDelegates.cs" />
     <Compile Include="Ping\PingModule.cs" />
@@ -81,7 +82,6 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="NsLookup\" />
-    <Folder Include="Pathping\" />
     <Folder Include="RPCPing\" />
   </ItemGroup>
   <ItemGroup>
